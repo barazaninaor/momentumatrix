@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { ScrollToTop } from "../ScrollToTop/ScrollToTop";
 import { NavBar } from "../NavBar/NavBar";
@@ -47,9 +47,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Router = () => {
+  // שימוש ב-BASE_URL של Vite כדי שיתאים אוטומטית גם לוקאלית (/) וגם לגיט (/momentumatrix)
+  const basename = import.meta.env.DEV ? "" : "/momentumatrix";
+
   return (
     <div>
-      <BrowserRouter basename="/momentumatrix">
+      <BrowserRouter basename={basename}>
         <ScrollToTop />
         <NavBar theArr={arrForNav} />
 
