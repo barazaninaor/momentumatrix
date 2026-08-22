@@ -153,7 +153,6 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
         </div>
 
         <div className="navbar-right">
-          <div className="navbar-right">
           {isLoggedIn ? (
             <div className="logged-in-container">
               <span className="logged-in-text">
@@ -192,7 +191,6 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
               </NavLink>
             </div>
           )}
-        </div>
         </div>
       </nav>
 
