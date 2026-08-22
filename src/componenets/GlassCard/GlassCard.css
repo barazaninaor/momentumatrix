@@ -1,0 +1,109 @@
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.glass-card {
+  width: 60%;
+  max-width: 900px;
+  /* שקיפות כהה ועמוקה שתשמור על קונטרסט מעולה */
+  background: rgba(15, 8, 30, 0.65); 
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  padding: 50px;
+  border-radius: 24px;
+  
+  /* נקודת האמצע: קו של 1.5px עם שקיפות 0.22 – חד וברור מספיק כדי שיראו את הגבולות, אבל לא בוהק מדי */
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  
+  /* הילה מאוזנת שנותנת קונטרסט נקי מסביב לקו */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9),
+              0 0 30px rgba(0, 240, 255, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+              
+  text-align: center;
+  margin: 40px auto;
+  color: white;
+  box-sizing: border-box;
+
+  /* אנימציית הופעה מושהית וחלקה */
+  animation: fadeInCard 0.6s ease-out 0.2s both;
+}
+
+@media (max-width: 1024px) {
+  .glass-card {
+    width: 90%;
+    padding: 30px;
+  }
+}
+
+.profile-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 6px solid rgba(0, 0, 0, 0.8);
+  margin-bottom: 25px;
+  object-fit: cover;
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+}
+
+.about-header-title {
+  font-size: 36px;
+  margin: 10px 0;
+  color: white;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #ccc;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+/* Quote Styling Adjustments - Clean & Blue-Free */
+.quote {
+  font-size: 1.00rem; 
+  color: #e2e8f0;
+  font-style: italic;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 24px 10px;
+  margin: 25px 0;
+  text-align: center; 
+  line-height: 1.6;
+}
+
+.quote-author {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.description-text {
+  text-align: justify;
+  line-height: 1.8;
+  font-size: 17px;
+}
+
+.description-text p {
+  margin-bottom: 20px;
+}
+
+.video-container {
+  margin-top: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+}

@@ -1,0 +1,14 @@
+.main-title {
+  color: #f7f8f8;
+  font-size: 72px;
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0 auto; /* Center the element horizontally within its parent */
+  max-width: 900px;
+  margin-bottom: 30px;
+  letter-spacing: -1px;
+  text-align: center; /* Center the text lines */
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+}

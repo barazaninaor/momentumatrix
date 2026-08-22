@@ -1,0 +1,165 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #1e1e2f;
+  border: 1px solid #2a2a40;
+  border-radius: 8px;
+  width: 580px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid #2a2a40;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #8a8aab;
+}
+
+/* אזור הגלילה הראשי של המודל */
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a40 transparent;
+}
+
+/* מרכוז מלא ומאוזן ל־3 העמודות בתוך המודל */
+.stocks-table-header,
+.stock-row {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 16px; /* רווח מבוקר שממרכז את הטבלה המצומצמת בצורה מושלמת */
+  width: 100%;
+}
+
+.stocks-table-header {
+  font-weight: 600;
+  color: #8a8aab;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2a40;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.stocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stock-row {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13px;
+  color: #c5c5d2;
+}
+
+.stock-row:last-child {
+  border-bottom: none;
+}
+
+/* הגדרת רוחבים מדויקים (הקטנת עמודת הסקטור ומרווחים מאוזנים) */
+.col-ticker { 
+  width: 85px; 
+  flex-shrink: 0; 
+  text-align: left; 
+}
+
+.col-sector { 
+  width: 75px; /* עמודת סקטור מצומצמת */
+  flex-shrink: 0; 
+  text-align: left; 
+  color: #c5c5d2; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.col-return { 
+  width: 85px; 
+  flex-shrink: 0; 
+  text-align: right; 
+  font-weight: 600; 
+}
+
+.stock-ticker { 
+  font-weight: 600; 
+  color: #fff; 
+}
+
+/* עיצוב גלילה מותאם אישית אחיד ונקייה */
+.modal-body::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.modal-body::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-body::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #2a2a40;
+  border-radius: 4px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #3b3b58;
+}
+
+.custom-scrollbar {
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a40 transparent;
+}
+
+.modal-total-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a40;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.positive { color: #10b981; }
+.negative { color: #ef4444; }

@@ -1,0 +1,110 @@
+html {
+  height: 100%;
+  background-color: #030712 !important;
+  /* Prevent automatic text resizing and layout shifts on mobile devices */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  height: 100%;
+  /* Deep multi-layered gradient for true depth and 3D volume */
+  background: 
+    radial-gradient(circle at 50% -10%, rgba(30, 58, 138, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, rgba(15, 23, 42, 0.8) 0%, transparent 40%),
+    radial-gradient(circle at 15% 80%, rgba(10, 15, 30, 0.6) 0%, transparent 50%),
+    linear-gradient(180deg, #0b1329 0%, #060913 50%, #020408 100%) !important;
+  background-attachment: fixed !important;
+  color: #f7f8f8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 48px 24px 40px 24px; /* Increased top padding for better spacing from the navbar */
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden; /* Prevent horizontal scrolling on mobile screens */
+}
+
+/* Subtle background grid overlay for a professional trading terminal vibe */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure inner containers sit above the grid and display the background depth */
+#app, 
+.main-container,
+main,
+div[id*="root"] {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+  box-sizing: border-box;
+}
+
+/* Add breathing room for top headings right below the navbar */
+h1:first-of-type,
+.page-title:first-of-type,
+.strategy-header-title:first-of-type {
+  margin-top: 24px;
+}
+
+
+/* ========================================================== */
+/* Global responsive overrides for mobile screens (max-width: 768px) */
+/* ========================================================== */
+@media screen and (max-width: 768px) {
+  body {
+    /* Reduce side paddings on mobile to maximize usable screen space */
+    padding: 24px 12px 30px 12px !important;
+  }
+
+  /* Ensure main wrapper elements stretch nicely without overflowing */
+  #app, 
+  .main-container,
+  main,
+  div[id*="root"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Handle wide tables gracefully with clean horizontal scrolling */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Force common card and container classes to fit viewport bounds */
+  .card, 
+  .panel, 
+  .box,
+  div[class*="card"],
+  div[class*="container"] {
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Scale down oversized headers for smaller viewports */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  h2 {
+    font-size: 1.25rem !important;
+  }
+}

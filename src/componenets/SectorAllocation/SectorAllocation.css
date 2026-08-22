@@ -1,0 +1,18 @@
+/* Sector Allocation Component CSS */
+.sector-chart-section {
+  background-color: #0c0d0e;
+  border: 1px solid #1f2124;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}

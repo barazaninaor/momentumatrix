@@ -1,0 +1,41 @@
+/* הכפתור הסטנדרטי והגדול (משמש בטפסים ובשאר האתר) */
+.custom-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: #000000;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  transition: all 0.2s ease;
+}
+
+.custom-btn.text-style:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+.custom-btn.solid-style {
+  background-color: #000000;
+  color: #ffffff;
+  border: 5px solid #ffffff; /* המסגרת העבה והיפה בטופס */
+}
+
+.custom-btn.solid-style:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* דריסה נקודתית אך ורק לכפתורים שנמצאים בתוך ה-NavBar כדי להקטין אותם */
+.navbar-right .custom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 6px 14px;
+  font-size: 13px;
+  border: 2px solid #ffffff; /* מסגרת דקה ומותאמת לתפריט */
+}

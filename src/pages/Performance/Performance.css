@@ -1,0 +1,155 @@
+/* Center and constrain width specifically for the performance table container */
+.performance-page .performance-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Fixed container box reserved fully in advance with a permanent min-height to prevent jumping */
+.performance-page .performance-content-container > div:first-child {
+    width: 1320px !important;
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: 280px; /* Forces the container to always reserve space for all benchmark rows */
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Wrapper box for the table */
+.performance-table-wrapper {
+    width: 100%;
+    min-height: 230px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 560px; /* Internal scrolling capability when historical years grow significantly */
+}
+
+/* Custom dark scrollbar styling for smooth appearance */
+.performance-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.performance-table-wrapper::-webkit-scrollbar-track {
+    background: #0b131e;
+}
+
+.performance-table-wrapper::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+
+.performance-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* Ensure the table spans full width with strict column structure */
+.fund-table {
+    width: 100% !important;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #0b131e;
+    text-align: center;
+    table-layout: fixed;
+    box-sizing: border-box;
+}
+
+.fund-table th, 
+.fund-table td {
+    border: 1px solid #1e293b;
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Table header cells configuration */
+.fund-table thead th {
+    background-color: #111c2e;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.8px;
+}
+
+/* Enforce rigid row height for all rows including benchmarks */
+.fund-table tr,
+.fund-table .benchmark-row {
+    height: 45px;
+    max-height: 45px;
+    box-sizing: border-box;
+}
+
+/* Year column styling */
+.year-cell {
+    font-weight: 600;
+    color: #e2e8f0;
+    background-color: #0f172a;
+}
+
+/* Total yearly return column styling */
+.total-cell {
+    font-weight: 600;
+    color: #f8fafc;
+    background-color: #0f172a;
+}
+
+.benchmark-row td {
+    background-color: rgba(15, 23, 42, 0.6);
+    font-size: 0.8rem !important;
+    height: 45px;
+    box-sizing: border-box;
+}
+
+/* Hidden state for unselected benchmarks: keeps exact dimensions in the DOM without hiding the physical space */
+.fund-table .benchmark-row.hidden-benchmark {
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+}
+
+.fund-table .benchmark-row.hidden-benchmark td {
+    border-color: transparent !important;
+}
+
+.benchmark-year-cell {
+    color: #94a3b8 !important;
+    font-style: italic;
+    background-color: #0b131e !important;
+    font-size: 0.75rem !important;
+}
+
+/* Clickable cell enhancement */
+.clickable-cell {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickable-cell:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Conditional formatting for positive and negative financial performance */
+.positive {
+    color: #22c55e;
+    font-weight: 500;
+    background-color: rgba(34, 197, 94, 0.03);
+}
+
+.negative {
+    color: #ef4444;
+    font-weight: 500;
+    background-color: rgba(239, 68, 68, 0.03);
+}
+
+.loading-state {
+    text-align: center;
+    padding: 40px;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    background-color: #0b131e;
+}

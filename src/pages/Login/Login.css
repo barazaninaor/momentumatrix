@@ -1,0 +1,98 @@
+/* Login form container - styled and centered independently without affecting the title */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+  background-color: #121417;
+  padding: 30px 40px;
+  border-radius: 16px;
+  border: 1px solid #1f2124;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(0, 210, 255, 0.08);
+  margin: 30px auto 0 auto; /* Centers the form horizontally and adds natural spacing below the title */
+  margin-top: 60px;
+}
+
+/* Form group (label + input) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Input label */
+.form-group label {
+  color: #8a8f98;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Input fields */
+.form-group input {
+  background-color: #0c0d0e;
+  border: 1px solid #1f2124;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 16px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  outline: none;
+  /* Forces browser native elements and autofill dropdowns to adopt dark mode style */
+  color-scheme: dark;
+}
+
+/* Input focus state */
+.form-group input:focus {
+  border-color: rgb(218, 219, 219);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+}
+
+/* Input placeholder styling */
+.form-group input::placeholder {
+  color: #4e535e;
+}
+
+/* Fix for browser autofill background color overriding */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #0c0d0e inset !important; /* Matches exactly the input background color */
+  -webkit-text-fill-color: #ffffff !important; /* Preserves white text color */
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.secondary-toggle-btn {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #b0b0b0;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.secondary-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+/* Container for link buttons to match width and positioning across login pages */
+.login-link-container {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.login-link-container .Button {
+  width: 100%;
+}

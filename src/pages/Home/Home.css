@@ -1,0 +1,194 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 40px 24px;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.home-chart-wrapper {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.home-chart-wrapper .sector-chart-section {
+  padding: 24px 20px 16px 20px !important; /* צמצום הריפוד התחתון בתוך הקופסה של הגרף */
+  margin: 0 auto 4px auto !important;     /* צמצום המרווח החיצוני מתחת לגרף */
+}
+
+.home-chart-wrapper .chart-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 440px !important;
+}
+
+.home-chart-wrapper .recharts-responsive-container {
+  height: 440px !important;
+}
+
+/* צמצום הרווח העליון של כותרת האסטרטגיה כדי שתתקרב לגרף */
+.home-strategy-title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 1050px;
+  margin: 4px auto 12px auto !important;
+  letter-spacing: -0.01em;
+  color: #8a8f98;
+}
+
+/* Card section below the strategy title */
+.hero-cta-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.hero-card {
+  width: 100%;
+  max-width: 1050px;
+  padding: 24px !important;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: #e2e8f0;
+  max-width: 900px;
+  line-height: 1.5;
+  margin: 0 auto 20px auto;
+  text-align: center;
+}
+
+/* CTA Buttons Group */
+.cta-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn-primary {
+  background: rgba(0, 240, 255, 0.1);
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #00f0ff;
+  color: #0a0e17;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Features Grid Section */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.features .card, .features > div {
+  padding: 24px !important;
+}
+
+.features h3 {
+  color: #00f0ff;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.features p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer Quote Section */
+.footer-quote-section {
+  margin-top: 8px;
+}
+
+.quote-card {
+  padding: 20px 24px !important;
+}
+
+.quote p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin: 0 0 8px 0;
+  font-style: italic;
+}
+
+.quote span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* הגדרות מעבר (Transition) גלובליות לכל הכרטיסיות */
+.card, 
+.hero-card, 
+.quote-card,
+.features > div {
+  transition: all 0.3s ease-in-out;
+}
+
+/* אפקט הובר גלובלי לבן, בולט ומגדיל את הכרטיסייה */
+.card:hover, 
+.hero-card:hover, 
+.quote-card:hover,
+.features > div:hover {
+  border-color: #ffffff !important;
+  border-width: 1.5px !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3), 0 6px 24px rgba(0, 0, 0, 0.6) !important;
+  transform: translateY(-4px) scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}

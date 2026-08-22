@@ -1,0 +1,180 @@
+.transactions-page {
+  color: #ffffff;
+  min-height: 80vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.transactions-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.table-responsive {
+  width: 100%;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #111827;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 14px 16px; /* תואם בדיוק למידות של טבלת הפורטפוליו */
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* רוחב עמודות מדויק */
+.transactions-table th.index-col, .transactions-table td:nth-child(1) { width: 70px; }
+.transactions-table th:nth-child(2), .transactions-table td:nth-child(2) { width: 130px; }
+.transactions-table th:nth-child(3), .transactions-table td:nth-child(3) { width: 150px; }
+.transactions-table th:nth-child(4), .transactions-table td:nth-child(4) { width: 160px; }
+.transactions-table th:nth-child(5), .transactions-table td:nth-child(5) { width: 130px; }
+.transactions-table th:nth-child(6), .transactions-table td:nth-child(6) { width: 150px; }
+.transactions-table th:nth-child(7), .transactions-table td:nth-child(7) { width: 160px; }
+
+.transactions-table th:last-child,
+.transactions-table td:last-child {
+  border-right: none;
+}
+
+.transactions-table th {
+  background-color: #1f293d;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.transactions-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.transactions-table tr:last-child {
+  border-bottom: none;
+}
+
+.transactions-table tr:hover {
+  background-color: #1e293b;
+}
+
+.index-cell {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.ticker-cell {
+  font-weight: 700;
+  color: #f3f4f6;
+  letter-spacing: 0.03em;
+}
+
+.date-cell {
+  color: #94a3b8;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* תגית מעוצבת שאינה משנה את גובה השורה */
+.badge {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+.badge-buy {
+  background-color: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.badge-sell {
+  background-color: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111827;
+  padding: 16px 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-btn {
+  background-color: #1f293d;
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-current {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.loading-state, .error-state, .empty-state {
+  padding: 50px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  background-color: #111827;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.error-state {
+  color: #f87171;
+}

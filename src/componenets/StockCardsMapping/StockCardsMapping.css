@@ -1,0 +1,48 @@
+/* Container holding all the stock cards */
+.stocks-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Individual stock card styling */
+.stock-card {
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 16px;
+  width: 200px;
+  background-color: #161b22;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+/* Header layout inside the card */
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* Stock symbol/ticker styling */
+.stock-symbol {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Price styling */
+.stock-price {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Change percentage colors */
+.stock-change.positive {
+  color: #3fb950; /* Green for positive change */
+}
+
+.stock-change.negative {
+  color: #f85149; /* Red for negative change */
+}

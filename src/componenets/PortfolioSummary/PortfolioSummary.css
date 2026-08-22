@@ -1,0 +1,42 @@
+.portfolio-summary {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 15px;
+  overflow-x: auto;
+  background-color: #111827;
+  padding: 20px 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 150px;
+  box-sizing: border-box;
+  gap: 6px;
+}
+
+.summary-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.summary-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f3f4f6;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-sub {
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
