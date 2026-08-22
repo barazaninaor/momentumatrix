@@ -12,7 +12,7 @@ import { Portfolio } from "../../pages/Portfolio/Portfolio";
 import { Transactions } from "../../pages/Transactions/Transactions";
 import { Login } from "../../pages/Login/Login";
 import { GenerateToken } from "../../pages/GenerateToken/GenerateToken"; 
-import { TokenLogin } from "../../pages/TokenLogin/TokenLogin"; // ייבוא עמוד ההתחברות באמצעות טוקן (עדכן את הנתיב במידת הצורך)
+import { TokenLogin } from "../../pages/TokenLogin/TokenLogin";
 import { Footer } from "../Footer/Footer";
 import { Modal } from "../Modal/Modal";
 
@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate(-1); // Goes back to the exact previous page the user was on
+    navigate(-1);
   };
 
   return (
@@ -49,7 +49,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 export const Router = () => {
   return (
     <div>
-      <BrowserRouter>
+      <BrowserRouter basename="/momentumatrix">
         <ScrollToTop />
         <NavBar theArr={arrForNav} />
 
@@ -60,7 +60,7 @@ export const Router = () => {
           <Route path="/strategy" element={<Strategy />} />
           <Route path="/login" element={<Login />} />
           
-          {/* Public or Token login route - כאן תוכל להגדיר אם ההתחברות עם טוקן פתוחה או מוגנת */}
+          {/* Public or Token login route */}
           <Route path="/token-login" element={<TokenLogin />} />
 
           {/* Protected routes requiring authentication */}
