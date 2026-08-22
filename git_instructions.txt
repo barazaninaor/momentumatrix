@@ -1,0 +1,23 @@
+# ==========================================
+# GIT & DEPLOY INSTRUCTIONS: FRONTEND (REACT)
+# ==========================================
+# Follow these steps whenever you make changes 
+# to the frontend and want to update GitHub & live site.
+
+# Step 1: Open terminal and navigate to the frontend directory
+cd frontend
+
+# Step 2: Check the status of your changed/new files (optional)
+git status
+
+# Step 3: Stage all modified and new files 
+git add .
+
+# Step 4: Commit the changes with a short, descriptive message
+git commit -m "Update"
+
+# Step 5: Push your source code updates to the main branch on GitHub
+git push origin main
+
+# Step 6: Build and deploy the updated website to GitHub Pages
+npm run deploy
