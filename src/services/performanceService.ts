@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { PerformanceAnalysisResponse } from '../types/performance';
 
 // Base URL for your FastAPI backend
-const API_URL = 'http://localhost:8000'; 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 /**
  * Fetches the performance matrix and analysis directly from the actual account history performance endpoint.

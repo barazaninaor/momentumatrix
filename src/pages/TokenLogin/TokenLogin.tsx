@@ -5,6 +5,9 @@ import "./TokenLogin.css";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { Button } from "../../componenets/Button/Button";
 
+// Base URL for API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const TokenLogin = () => {
   const navigate = useNavigate();
 
@@ -24,7 +27,7 @@ export const TokenLogin = () => {
 
     try {
       // Send token login request (POST) to the server
-      const response = await fetch("http://localhost:8000/auth/token-login", {
+      const response = await fetch(`${API_URL}/auth/token-login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

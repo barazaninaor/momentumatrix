@@ -6,6 +6,9 @@ import { PerformanceChart } from '../../componenets/PerformanceChart/Performance
 import { PerformanceMetricsSummary } from '../../componenets/PerformanceMetricsSummary/PerformanceMetricsSummary';
 import "./Backtesting.css";
 
+// Base URL for API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const Backtesting: React.FC = () => {
   const [selectedBenchmarks, setSelectedBenchmarks] = useState<string[]>([]);
   const [rawApiData, setRawApiData] = useState<any>(null);
@@ -16,7 +19,7 @@ export const Backtesting: React.FC = () => {
     const fetchBacktestData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:8000/backtest/analysis');
+        const response = await fetch(`${API_URL}/backtest/analysis`);
         if (response.ok) {
           const data = await response.json();
           console.log("Backtest data loaded successfully:", data);

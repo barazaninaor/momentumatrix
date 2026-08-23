@@ -10,7 +10,7 @@ import axios from 'axios';
 import "./Performance.css";
 
 // Base URL for your FastAPI backend
-const API_URL = 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const Performance: React.FC = () => {
   // Initialize with an empty array so no benchmark is selected by default

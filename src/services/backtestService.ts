@@ -1,8 +1,7 @@
 import axios from 'axios';
 import type { MonthlyPerformanceRow } from '../types/backtest';
 
-const API_URL = 'http://localhost:8000/backtest';
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 /**
  * Fetches the processed monthly performance matrix directly from the backend.
  */

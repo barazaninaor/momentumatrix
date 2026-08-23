@@ -3,6 +3,9 @@ import "./GenerateToken.css";
 import { Button } from "../../componenets/Button/Button";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 
+// Base URL for API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const GenerateToken = () => {
   const [email, setEmail] = useState<string>("");
   const [durationMinutes, setDurationMinutes] = useState<number>(10);
@@ -19,7 +22,7 @@ export const GenerateToken = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/auth/generate-token", {
+      const response = await fetch(`${API_URL}/auth/generate-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

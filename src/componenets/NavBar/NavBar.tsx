@@ -10,6 +10,9 @@ type NavBarProps = {
   theArr: NavItem[];
 };
 
+// Base URL for API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
   const navigate = useNavigate();
 
@@ -93,7 +96,7 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
         const userEmail = localStorage.getItem("user_email");
         if (!userEmail) return;
 
-        const response = await fetch(`http://localhost:8000/auth/token-status/${encodeURIComponent(userEmail)}`);
+        const response = await fetch(`${API_URL}/auth/token-status/${encodeURIComponent(userEmail)}`);
         
         if (response.ok && isMounted) {
           const data = await response.json();

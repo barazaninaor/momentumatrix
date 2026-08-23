@@ -4,6 +4,9 @@ import "./Login.css";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { Button } from "../../componenets/Button/Button";
 
+// Base URL for API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,7 +40,7 @@ export const Login = () => {
     try {
       if (isEditingPassword) {
         // Send password change request (PUT) to the server
-        const response = await fetch("http://localhost:8000/auth/change-password", {
+        const response = await fetch(`${API_URL}/auth/change-password`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -68,7 +71,7 @@ export const Login = () => {
         }, 2000);
       } else {
         // Send standard login request (POST)
-        const response = await fetch("http://localhost:8000/auth/login", {
+        const response = await fetch(`${API_URL}/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

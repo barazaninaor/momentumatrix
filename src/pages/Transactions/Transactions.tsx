@@ -3,6 +3,9 @@ import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { LoadingSpinner } from "../../componenets/LoadingSpinner/LoadingSpinner";
 import "./Transactions.css";
 
+// Base URL for API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 interface Transaction {
   id: number;
   portfolio_id: number;
@@ -21,7 +24,7 @@ export const Transactions = () => {
   const pageSize = 10;
 
   useEffect(() => {
-    fetch("http://localhost:8000/transactions/")
+    fetch(`${API_URL}/transactions/`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch transactions");
         return res.json();
