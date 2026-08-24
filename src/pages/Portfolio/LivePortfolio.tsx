@@ -17,7 +17,7 @@ export const Portfolio = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/static-portfolio/latest")
+    fetch("http://127.0.0.1:8000/portfolios/live/ibkr")
       .then((res) => res.json())
       .then((result) => {
         setPortfolioData(result.data || result);
@@ -60,20 +60,12 @@ export const Portfolio = () => {
   const itdPnl = Number(portfolioData?.itd_pnl || 0);
   const itdChange = Number(portfolioData?.itd_change_percent || 0);
 
-  // Extract the update date if provided by backend (e.g. portfolioData.date)
-  const updateDate = portfolioData?.date || portfolioData?.snapshot_date || null;
-
   return (
     <div className="portfolio-page">
       <MainTitle MainTitle="Portfolio" />
-      {updateDate && (
-        <p className="portfolio-subtitle-date" style={{ color: "#9ca3af", fontSize: "0.85rem", marginTop: "-10px", marginBottom: "20px" }}>
-          Updated as of: {updateDate}
-        </p>
-      )}
 
       {loading ? (
-        <LoadingSpinner message="Loading static portfolio..." />
+        <LoadingSpinner message="Loading live portfolio..." />
       ) : (
         <div className="portfolio-content">
           
@@ -142,7 +134,7 @@ export const Portfolio = () => {
           </div>
 
           <div className="sector-chart-section">
-            <SubHeading SubHeading="Portfolio Sector Allocation" />
+            <SubHeading SubHeading="Live Sector Allocation" />
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={350}>
                 <PieChart>
