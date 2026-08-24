@@ -8,13 +8,14 @@ import { About } from "../../pages/About/About";
 import { Strategy } from "../../pages/Strategy/Strategy";
 import { Backtesting } from "../../pages/Backtesting/Backtesting";
 import { Performance } from "../../pages/Performance/Performance";
-import { Portfolio } from "../../pages/Portfolio/Portfolio";
+import { Portfolio } from "../../pages/Portfolio/LivePortfolio";
 import { Transactions } from "../../pages/Transactions/Transactions";
 import { Login } from "../../pages/Login/Login";
 import { GenerateToken } from "../../pages/GenerateToken/GenerateToken"; 
 import { TokenLogin } from "../../pages/TokenLogin/TokenLogin";
 import { Footer } from "../Footer/Footer";
 import { Modal } from "../Modal/Modal";
+
 
 /**
  * Handles redirection for GitHub Pages SPA fallback.

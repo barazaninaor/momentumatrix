@@ -34,7 +34,6 @@ export const Portfolio = () => {
     return (b["Total Change %"] || 0) - (a["Total Change %"] || 0);
   });
 
-  // Calculate sector allocation dynamically based on each position's actual weight and sector
   const sectorMap: { [key: string]: number } = {};
   positionsList.forEach((item: any) => {
     const sector = item.Sector || item.sector || item.GICS_Sector || item.gics_sector || "Other";
@@ -66,7 +65,7 @@ export const Portfolio = () => {
     <div className="portfolio-page">
       <MainTitle MainTitle="Portfolio" />
       {updateDate && (
-        <p className="portfolio-subtitle-date" style={{ color: "#9ca3af", fontSize: "0.9rem", marginTop: "-8px", marginBottom: "20px", fontWeight: 400 }}>
+        <p className="portfolio-subtitle-date">
           Last Update: {updateDate}
         </p>
       )}
