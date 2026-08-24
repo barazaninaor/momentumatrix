@@ -9,8 +9,10 @@ import { fetchPerformanceAnalysis } from "../../services/performanceService";
 import axios from 'axios';
 import "./Performance.css";
 
-// Base URL for your FastAPI backend
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Base URL for your FastAPI backend (automatically switches to Render in production)
+const API_URL = import.meta.env.DEV 
+  ? 'http://localhost:8000' 
+  : 'https://momentumatrix.onrender.com';
 
 export const Performance: React.FC = () => {
   // Initialize with an empty array so no benchmark is selected by default
