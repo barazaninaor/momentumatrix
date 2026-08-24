@@ -60,8 +60,8 @@ export const Portfolio = () => {
   const itdPnl = Number(portfolioData?.itd_pnl || 0);
   const itdChange = Number(portfolioData?.itd_change_percent || 0);
 
-  // Extract the update date if provided by backend (e.g. portfolioData.date)
-  const updateDate = portfolioData?.date || portfolioData?.snapshot_date || null;
+  // Extract the update date provided by backend (supports date, snapshot_date, or latest_date)
+  const updateDate = portfolioData?.date || portfolioData?.snapshot_date || portfolioData?.latest_date || null;
 
   return (
     <div className="portfolio-page">
