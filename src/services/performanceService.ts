@@ -1,8 +1,10 @@
 import axios from 'axios';
 import type { PerformanceAnalysisResponse } from '../types/performance';
 
-// Base URL for your FastAPI backend
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Base URL for your FastAPI backend (automatically switches to Render in production)
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000'
+  : 'https://momentumatrix.onrender.com';
 
 /**
  * Fetches the performance matrix and analysis directly from the actual account history performance endpoint.
