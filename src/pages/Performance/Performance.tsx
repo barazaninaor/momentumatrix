@@ -10,8 +10,8 @@ import axios from 'axios';
 import "./Performance.css";
 
 // Base URL for your FastAPI backend (automatically switches to Render in production)
-const API_URL = import.meta.env.DEV 
-  ? 'http://localhost:8000' 
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000'
   : 'https://momentumatrix.onrender.com';
 
 export const Performance: React.FC = () => {
