@@ -8,7 +8,7 @@ import { About } from "../../pages/About/About";
 import { Strategy } from "../../pages/Strategy/Strategy";
 import { Backtesting } from "../../pages/Backtesting/Backtesting";
 import { Performance } from "../../pages/Performance/Performance";
-import { Portfolio } from "../../pages/Portfolio/LivePortfolio";
+import { Portfolio } from "../../pages/Portfolio/Portfolio";
 import { Transactions } from "../../pages/Transactions/Transactions";
 import { Login } from "../../pages/Login/Login";
 import { GenerateToken } from "../../pages/GenerateToken/GenerateToken"; 
