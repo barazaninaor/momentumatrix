@@ -16,7 +16,29 @@ import { TokenLogin } from "../../pages/TokenLogin/TokenLogin";
 import { Footer } from "../Footer/Footer";
 import { Modal } from "../Modal/Modal";
 
-// ProtectedRoute component that shows the modal and returns to the previous page on close
+/**
+ * Handles redirection for GitHub Pages SPA fallback.
+ * Reads the 'p' query parameter injected by 404.html and navigates back to the original route.
+ */
+const RedirectHandler = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const redirectPath = params.get("p");
+    if (redirectPath) {
+      // Clean the URL and navigate to the intended path seamlessly
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate]);
+
+  return null;
+};
+
+/**
+ * ProtectedRoute component that checks authentication status.
+ * If logged in, renders the children; otherwise, displays a modal and redirects on close.
+ */
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,12 +69,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Router = () => {
-  // שימוש ב-BASE_URL של Vite כדי שיתאים אוטומטית גם לוקאלית (/) וגם לגיט (/momentumatrix)
+  // Use Vite's BASE_URL / DEV flag to set the correct basename for local vs production (GitHub Pages)
   const basename = import.meta.env.DEV ? "" : "/momentumatrix";
 
   return (
     <div>
       <BrowserRouter basename={basename}>
+        <RedirectHandler />
         <ScrollToTop />
         <NavBar theArr={arrForNav} />
 
