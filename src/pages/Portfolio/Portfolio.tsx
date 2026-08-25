@@ -18,12 +18,8 @@ export const Portfolio = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Define the API base URL, using environment variables with a fallback for production/local testing
-    const API_BASE_URL = process.env.REACT_APP_API_URL || "https://your-backend-service.onrender.com";
-    
-    // Optional check for local development versus production
-    // const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-    // const targetUrl = isLocal ? "http://127.0.0.1:8000/static-portfolio/latest" : `${API_BASE_URL}/static-portfolio/latest`;
+    // Define the API base URL using Vite's environment standard with a local fallback
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
     // Fetch the latest static portfolio data from the backend
     fetch(`${API_BASE_URL}/static-portfolio/latest`)
