@@ -13,11 +13,20 @@ import { SubHeading } from "../../componenets/SubHeading/SubHeading";
 import { PortfolioSummary } from "../../componenets/PortfolioSummary/PortfolioSummary";
 
 export const Portfolio = () => {
+  // State management for portfolio data and loading status
   const [portfolioData, setPortfolioData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/static-portfolio/latest")
+    // Define the API base URL, using environment variables with a fallback for production/local testing
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "https://your-backend-service.onrender.com";
+    
+    // Optional check for local development versus production
+    // const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    // const targetUrl = isLocal ? "http://127.0.0.1:8000/static-portfolio/latest" : `${API_BASE_URL}/static-portfolio/latest`;
+
+    // Fetch the latest static portfolio data from the backend
+    fetch(`${API_BASE_URL}/static-portfolio/latest`)
       .then((res) => res.json())
       .then((result) => {
         setPortfolioData(result.data || result);
@@ -29,11 +38,13 @@ export const Portfolio = () => {
       });
   }, []);
 
+  // Extract and sort positions by total change percentage in descending order
   const rawPositions = portfolioData?.positions || [];
   const positionsList = [...rawPositions].sort((a, b) => {
     return (b["Total Change %"] || 0) - (a["Total Change %"] || 0);
   });
 
+  // Aggregate weight allocations by market sector
   const sectorMap: { [key: string]: number } = {};
   positionsList.forEach((item: any) => {
     const sector = item.Sector || item.sector || item.GICS_Sector || item.gics_sector || "Other";
@@ -41,13 +52,16 @@ export const Portfolio = () => {
     sectorMap[sector] = (sectorMap[sector] || 0) + weight;
   });
 
+  // Transform sector map into array format required by Recharts
   const sectorData = Object.keys(sectorMap).map((sector) => ({
     name: sector,
     value: sectorMap[sector],
   }));
 
+  // Color palette for the sector allocation pie chart
   const COLORS = ["#00d2ff", "#3b82f6", "#06b6d4", "#6366f1", "#0ea5e9", "#2563eb", "#10b981", "#f59e0b"];
 
+  // Portfolio summary metrics extraction
   const accountValue = Number(portfolioData?.net_liquidation || 0);
   const cashBalance = Number(portfolioData?.cash_balance || 0);
   const initialInvestment = 1000000.0;
@@ -59,6 +73,7 @@ export const Portfolio = () => {
   const itdPnl = Number(portfolioData?.itd_pnl || 0);
   const itdChange = Number(portfolioData?.itd_change_percent || 0);
 
+  // Determine the last update timestamp
   const updateDate = portfolioData?.date || portfolioData?.snapshot_date || portfolioData?.latest_date || null;
 
   return (
@@ -75,6 +90,7 @@ export const Portfolio = () => {
       ) : (
         <div className="portfolio-content">
           
+          {/* Summary metrics component */}
           <PortfolioSummary 
             initialInvestment={initialInvestment}
             accountValue={accountValue}
@@ -87,6 +103,7 @@ export const Portfolio = () => {
             itdChange={itdChange}
           />
 
+          {/* Positions table wrapper */}
           <div className="portfolio-table-wrapper">
             <table className="portfolio-table">
               <thead>
@@ -139,6 +156,7 @@ export const Portfolio = () => {
             </table>
           </div>
 
+          {/* Sector allocation pie chart section */}
           <div className="sector-chart-section">
             <SubHeading SubHeading="Sector Allocation" />
             <div className="chart-container">
