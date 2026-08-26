@@ -38,15 +38,15 @@
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* רוחב עמודות מדויק (8 עמודות סה"כ) */
+/* רוחב עמודות מדויק לפי הסדר החדש (8 עמודות) */
 .transactions-table th.index-col, .transactions-table td:nth-child(1) { width: 60px; }
-.transactions-table th:nth-child(2), .transactions-table td:nth-child(2) { width: 110px; }
-.transactions-table th:nth-child(3), .transactions-table td:nth-child(3) { width: 100px; }
-.transactions-table th:nth-child(4), .transactions-table td:nth-child(4) { width: 180px; }
-.transactions-table th:nth-child(5), .transactions-table td:nth-child(5) { width: 130px; }
-.transactions-table th:nth-child(6), .transactions-table td:nth-child(6) { width: 120px; }
-.transactions-table th:nth-child(7), .transactions-table td:nth-child(7) { width: 130px; }
-.transactions-table th:nth-child(8), .transactions-table td:nth-child(8) { width: 140px; }
+.transactions-table th:nth-child(2), .transactions-table td:nth-child(2) { width: 130px; } /* Date */
+.transactions-table th:nth-child(3), .transactions-table td:nth-child(3) { width: 110px; } /* Operation */
+.transactions-table th:nth-child(4), .transactions-table td:nth-child(4) { width: 100px; } /* Ticker */
+.transactions-table th:nth-child(5), .transactions-table td:nth-child(5) { width: 180px; } /* Company */
+.transactions-table th:nth-child(6), .transactions-table td:nth-child(6) { width: 120px; } /* Shares */
+.transactions-table th:nth-child(7), .transactions-table td:nth-child(7) { width: 130px; } /* Price */
+.transactions-table th:nth-child(8), .transactions-table td:nth-child(8) { width: 140px; } /* Total */
 
 .transactions-table th:last-child,
 .transactions-table td:last-child {
@@ -81,6 +81,10 @@
   font-weight: 600;
 }
 
+.date-cell {
+  color: #94a3b8;
+}
+
 .ticker-cell {
   font-weight: 700;
   color: #f3f4f6;
@@ -88,17 +92,13 @@
 }
 
 .company-cell {
-  color: #94a3b8;
+  color: #ffffff; /* שונה ללבן בולט */
   font-size: 13px;
   text-align: left !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 180px;
-}
-
-.date-cell {
-  color: #94a3b8;
 }
 
 .text-right {

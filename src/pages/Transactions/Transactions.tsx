@@ -66,10 +66,10 @@ export const Transactions = () => {
                 <thead>
                   <tr>
                     <th className="index-col">#</th>
+                    <th>Date</th>
                     <th>Operation</th>
                     <th>Ticker</th>
                     <th>Company</th>
-                    <th>Date</th>
                     <th className="text-right">Shares</th>
                     <th className="text-right">Price</th>
                     <th className="text-right">Total</th>
@@ -86,6 +86,7 @@ export const Transactions = () => {
                     return (
                       <tr key={tx.id}>
                         <td className="index-cell">{rowNumber}</td>
+                        <td className="date-cell">{formattedDate}</td>
                         <td>
                           <span className={`badge ${isBuy ? "badge-buy" : "badge-sell"}`}>
                             {tx.operation}
@@ -93,7 +94,6 @@ export const Transactions = () => {
                         </td>
                         <td className="ticker-cell">{tx.ticker}</td>
                         <td className="company-cell">{companyName}</td>
-                        <td className="date-cell">{formattedDate}</td>
                         <td className="text-right">{tx.shares.toLocaleString()}</td>
                         <td className="text-right">${tx.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
                         <td className="text-right">${totalValue.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
