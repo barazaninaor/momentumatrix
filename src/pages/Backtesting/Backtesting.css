@@ -21,17 +21,21 @@
   margin: 0 auto;
 }
 
-/* Mobile responsive override to expand table to 100% width and enable scrolling */
+/* Mobile responsive override to expand table container and enable smooth horizontal scrolling */
 @media screen and (max-width: 768px) {
   .performance-table-container.backtest-table-width {
-    width: 100%;
-    overflow-x: auto;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
+    display: block !important;
+    box-sizing: border-box;
+    padding: 0 4px !important;
   }
 
   .performance-table-container.backtest-table-width .fund-table {
     width: 100% !important;
-    min-width: 850px;
+    min-width: 850px !important; /* Prevents columns from crushing and enables horizontal scrolling */
     margin: 0 !important;
   }
 }

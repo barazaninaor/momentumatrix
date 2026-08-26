@@ -153,39 +153,39 @@
 /* Mobile responsive adjustments */
 @media screen and (max-width: 768px) {
   .portfolio-table-wrapper {
-    overflow-x: auto;
-    overflow-y: visible;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 20px;
+    padding-bottom: 20px !important;
     position: relative;
-    width: 100%;
-    /* Enables smooth and safe horizontal scrolling without clipping on narrow screens */
-    display: block;
+    width: 100% !important;
+    display: block !important;
   }
 
   .portfolio-table {
-    min-width: 1050px;
+    min-width: 1050px !important;
+    width: 1050px !important;
   }
 
   .portfolio-table th,
   .portfolio-table td {
-    padding: 10px 8px;
-    font-size: 12px;
-    white-space: nowrap;
+    padding: 10px 8px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
   }
 
   /* Sticky first column (Ticker/Company) so it stays pinned to the left during horizontal scroll */
   .portfolio-table th:first-child,
   .portfolio-table td:first-child {
-    position: sticky;
-    left: 0;
-    background-color: #111827;
-    z-index: 2;
-    border-right: 2px solid rgba(255, 255, 255, 0.15);
+    position: sticky !important;
+    left: 0 !important;
+    background-color: #111827 !important;
+    z-index: 2 !important;
+    border-right: 2px solid rgba(255, 255, 255, 0.15) !important;
   }
 
   .portfolio-table th:first-child {
-    background-color: #1f293d;
+    background-color: #1f293d !important;
   }
 
   /* Mobile adjustments for the sector pie chart: compact padding and visible container */
