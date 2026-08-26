@@ -36,7 +36,7 @@
   padding-bottom: 8px;
 }
 
-/* Core table layout properties - מעבר ל-separate כדי לאפשר sticky אמיתי */
+/* Core table layout properties - using separate border-collapse for sticky support */
 .portfolio-table {
   width: 100%;
   min-width: 1050px;
@@ -61,7 +61,7 @@
   background-clip: padding-box;
 }
 
-/* רוחב עמודות מוגדר מראש למניעת תקיעות וקפיצות עיצוב */
+/* Predefined column widths to prevent layout shifts and jumps */
 .portfolio-table th:nth-child(1), .portfolio-table td:nth-child(1) { width: 160px; text-align: left !important; }
 .portfolio-table th:nth-child(2), .portfolio-table td:nth-child(2) { width: 110px; }
 .portfolio-table th:nth-child(3), .portfolio-table td:nth-child(3) { width: 110px; }
@@ -75,7 +75,7 @@
 .portfolio-table th:nth-child(11), .portfolio-table td:nth-child(11) { width: 100px; }
 
 /* ========================================================
-   GLOBAL STICKY FIRST COLUMN (נעילת העמודה הראשונה תמיד)
+   GLOBAL STICKY FIRST COLUMN (Always locking the first column)
    ======================================================== */
 .portfolio-table th:first-child,
 .portfolio-table td:first-child {
@@ -83,7 +83,7 @@
   left: 0 !important;
   z-index: 10 !important;
   background-color: #111827 !important;
-  border-right: 2px solid rgba(255, 255, 255, 0.25) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important; /* Soft standard border instead of the thick white line */
 }
 
 .portfolio-table th:first-child {
