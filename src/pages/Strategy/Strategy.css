@@ -13,3 +13,67 @@
   color: white;
   text-align: center;
 }
+
+/* Mobile-only adjustments */
+@media screen and (max-width: 768px) {
+  .strategy-page {
+    padding: 12px 8px !important; /* מחזיר קצת אוויר למעלה ולצדדים כדי ששום דבר לא ייחתך */
+    margin: 0 !important;
+  }
+
+  .strategy-page .hero-card,
+  .strategy-page .glass-card {
+    padding: 16px 12px !important; /* ריווח פנימי מאוזן בכרטיס */
+    margin: 0 auto !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .strategy-header-title {
+    font-size: 1.5rem !important;
+    margin: 4px 0 6px 0 !important;
+  }
+
+  .strategy-page .subtitle {
+    font-size: 0.9rem !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* עיצוב מותאם לציטוט במובייל עם רווח צידי עדין */
+  .strategy-page .footer-quote-section {
+    margin: 12px 0 16px 0 !important;
+    padding: 0 4px !important;
+    box-sizing: border-box;
+  }
+
+  .strategy-page .quote-card {
+    padding: 12px 8px !important;
+    background: transparent !important;
+    border: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 0 !important;
+  }
+
+  .strategy-page .quote p {
+    font-size: 0.88rem !important;
+    line-height: 1.45 !important;
+    margin: 0 0 6px 0 !important;
+  }
+
+  .strategy-page .quote span {
+    font-size: 0.75rem !important;
+    margin: 0 !important;
+  }
+
+  /* פסקאות הטקסט במובייל */
+  .strategy-page p, 
+  .strategy-page .strategy-description p,
+  .strategy-page .description-text p,
+  .strategy-card p {
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 12px !important;
+    text-align: left !important;
+  }
+}

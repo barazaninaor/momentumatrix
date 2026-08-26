@@ -14,13 +14,13 @@
   overflow: hidden; /* Ensure inner elements don't spill out */
 }
 
-/* Independent title styling */
+/* Independent title styling - Responsive and perfectly proportioned */
 .chart-independent-title {
   color: #f7f8f8 !important;
-  font-size: 36px !important; /* Scaled down slightly for mobile safety */
+  font-size: clamp(20px, 5vw, 42px) !important; /* Scales fluidly and never overflows mobile screens */
   font-weight: 500 !important;
-  line-height: 1.2 !important;
-  margin: 20px auto 16px auto !important;
+  line-height: 1.25 !important;
+  margin: 16px auto 16px auto !important;
   width: 100% !important;
   max-width: 100% !important;
   text-align: center !important;
@@ -31,6 +31,7 @@
   align-items: center !important;
   box-sizing: border-box;
   word-break: break-word; /* Prevent long titles from overflowing */
+  padding: 0 10px;
 }
 
 /* Benchmark selection toolbar */

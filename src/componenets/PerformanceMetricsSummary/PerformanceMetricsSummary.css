@@ -36,17 +36,61 @@
   font-variant-numeric: tabular-nums;
 }
 
-.metric-value.positive {
+.metric-value.positive, .positive {
   color: #22c55e;
 }
 
-.metric-value.negative {
+.metric-value.negative, .negative {
   color: #ef4444;
 }
 
-.metric-subtext {
+.metric-subtext, .spy-subtext {
   font-size: 13px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: #6b7280;
+  margin-top: 2px;
+}
+
+.metric-prefix {
+  color: #888;
+  font-size: 0.7em;
+  margin-right: 6px;
+}
+
+.metric-date {
+  color: #ffffff;
+}
+
+/* Mobile-only adjustments: 2 columns layout (clean 2-column grid for mobile screens) */
+@media screen and (max-width: 768px) {
+  .backtesting-summary-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+    padding: 16px;
+    gap: 18px 14px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px auto;
+  }
+
+  .metric-item {
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .metric-label {
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .metric-value {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .spy-subtext {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+  }
 }

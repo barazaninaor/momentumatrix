@@ -126,10 +126,21 @@ export const Portfolio = () => {
                     const totalChange = Number(item["Total Change %"] || 0);
                     const weightVal = Number(item.Weight || 0);
                     const sectorName = item.Sector || item.sector || item.GICS_Sector || item.gics_sector || "N/A";
+                    
+                    // שליפת שם החברה מהשדה שהשרת מחזיר
+                    const companyName = item.company_name || item.Company_Name || item.companyName || "";
 
                     return (
                       <tr key={index}>
-                        <td>{item.Ticker}</td>
+                        {/* טיקר ושם החברה משולבים באותה עמודה */}
+                        <td className="ticker-cell">
+                          <div className="ticker-symbol">{item.Ticker}</div>
+                          {companyName && companyName !== item.Ticker && (
+                            <div className="company-name" style={{ fontSize: "0.8rem", color: "#9ca3af", marginTop: "2px" }}>
+                              {companyName}
+                            </div>
+                          )}
+                        </td>
                         <td>{sectorName}</td>
                         <td>${Number(item["Cost Basis"] || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         <td>${Number(item.Price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>

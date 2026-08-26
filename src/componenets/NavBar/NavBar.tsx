@@ -146,11 +146,19 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
             <span></span>
           </button>
 
+          {/* Logo on the left */}
           <NavLink to="/" className="navbar-logo-wrapper" onClick={closeMenu}>
             <img src={logoImg} alt="MomentuMatrix Logo" className="navbar-logo-icon" />
           </NavLink>
+
+          {/* Brand Name */}
           <NavLink to="/" className="navbar-brand" onClick={closeMenu}>
             MomentuMatrix
+          </NavLink>
+
+          {/* Logo on the right of the brand */}
+          <NavLink to="/" className="navbar-logo-wrapper" onClick={closeMenu}>
+            <img src={logoImg} alt="MomentuMatrix Logo" className="navbar-logo-icon" />
           </NavLink>
         </div>
 

@@ -8,13 +8,18 @@ export const Strategy = () => {
     <div className="strategy-page">
       <MainTitle MainTitle="Strategy" />
 
-      <GlassCard>
+      <GlassCard className="hero-card">
         <h1 className="strategy-header-title">Quantitative Equity Rotation</h1>
         <h2 className="subtitle">Systematic Momentum & Risk Management</h2>
 
-        <div className="quote">
-          <p>"Virtue is greedy for danger and does not think about what it is going to suffer but what it is striving toward."</p>
-          <span className="quote-author">— Seneca</span>
+        {/* Using exact quote class structure from Home page */}
+        <div className="footer-quote-section">
+          <div className="quote-card">
+            <div className="quote">
+              <p>"Virtue is greedy for danger and does not think about what it is going to suffer but what it is striving toward."</p>
+              <span>— Seneca</span>
+            </div>
+          </div>
         </div>
 
         <div className="description-text">

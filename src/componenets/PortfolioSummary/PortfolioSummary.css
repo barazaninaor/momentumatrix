@@ -1,3 +1,4 @@
+/* Main portfolio summary wrapper layout */
 .portfolio-summary {
   display: flex;
   flex-direction: row;
@@ -9,8 +10,11 @@
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Individual summary card styling */
 .summary-card {
   display: flex;
   flex-direction: column;
@@ -20,6 +24,7 @@
   gap: 6px;
 }
 
+/* Card title typography and formatting */
 .summary-title {
   font-size: 12px;
   text-transform: uppercase;
@@ -28,6 +33,7 @@
   letter-spacing: 0.05em;
 }
 
+/* Card primary metric value formatting */
 .summary-value {
   font-size: 18px;
   font-weight: 700;
@@ -35,8 +41,32 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Card secondary metric or subtext styling */
 .summary-sub {
   font-size: 13px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+}
+
+/* Mobile responsive media query (applies only without harming desktop view) */
+@media screen and (max-width: 768px) {
+  .portfolio-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns layout on mobile */
+    overflow-x: visible;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .summary-card {
+    min-width: 0; /* Releases minimum width constraint to fit exactly two per row */
+    background-color: rgba(17, 28, 46, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .summary-value {
+    font-size: 15px; /* Prevents text wrapping or overflow for long figures on mobile */
+  }
 }
