@@ -3,6 +3,7 @@
   color: #ffffff;
   min-height: 80vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 /* Portfolio date subtitle typography */
@@ -24,19 +25,20 @@
   gap: 24px;
 }
 
-/* Portfolio positions table wrapper */
+/* Portfolio positions table wrapper - שונה ל-auto כדי לאפשר גלילה חלק */
 .portfolio-table-wrapper {
   width: 100%;
-  overflow-x: visible;
+  overflow-x: auto;
   overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
   display: block;
-  padding-bottom: 0;
+  padding-bottom: 8px;
 }
 
 /* Core table layout properties */
 .portfolio-table {
   width: 100%;
-  min-width: unset;
+  min-width: 1050px; /* מובטח רוחב מינימלי כדי שלא תישבר */
   border-collapse: collapse;
   background-color: #111827;
   border-radius: 10px;
@@ -55,6 +57,16 @@
   font-variant-numeric: tabular-nums;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+/* רוחב עמודות מוגדר מראש למניעת תקיעות וקפיצות עיצוב */
+.portfolio-table th:nth-child(1), .portfolio-table td:nth-child(1) { width: 160px; text-align: left !important; }
+.portfolio-table th:nth-child(2), .portfolio-table td:nth-child(2) { width: 110px; }
+.portfolio-table th:nth-child(3), .portfolio-table td:nth-child(3) { width: 110px; }
+.portfolio-table th:nth-child(4), .portfolio-table td:nth-child(4) { width: 120px; }
+.portfolio-table th:nth-child(5), .portfolio-table td:nth-child(5) { width: 130px; }
+.portfolio-table th:nth-child(6), .portfolio-table td:nth-child(6) { width: 120px; }
+.portfolio-table th:nth-child(7), .portfolio-table td:nth-child(7) { width: 130px; }
+.portfolio-table th:nth-child(8), .portfolio-table td:nth-child(8) { width: 140px; }
 
 /* Remove right border on the last column cell */
 .portfolio-table th:last-child,
@@ -156,8 +168,7 @@
     overflow-x: auto !important;
     overflow-y: visible !important;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 20px !important;
-    position: relative;
+    padding-bottom: 16px !important;
     width: 100% !important;
     display: block !important;
   }
@@ -188,7 +199,7 @@
     background-color: #1f293d !important;
   }
 
-  /* Mobile adjustments for the sector pie chart: compact padding and visible container */
+  /* Mobile adjustments for the sector pie chart */
   .sector-chart-section {
     padding: 12px !important;
     overflow: visible !important;
@@ -199,7 +210,6 @@
     width: 100% !important;
   }
 
-  /* Increase font size of chart labels for better mobile readability */
   .sector-chart-section text {
     font-size: 12px !important;
     font-weight: 600 !important;

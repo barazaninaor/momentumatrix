@@ -3,6 +3,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Reset display settings for table and chart sections without using important */
@@ -13,11 +16,20 @@
   border: none;
   box-shadow: none;
   padding: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Restores the backtest table width to 70% on desktop screens as originally configured */
+/* Restores the backtest table width to 70% on desktop screens */
+.performance-table-container.backtest-table-width {
+  width: 100%;
+  overflow-x: auto; /* מאפשר גלילה גם בדסקטופ במידת הצורך */
+  -webkit-overflow-scrolling: touch;
+}
+
 .performance-table-container.backtest-table-width .fund-table {
   width: 70% !important;
+  min-width: 850px; /* מבטיח רוחב מינימלי שלא ימעך את העמודות */
   margin: 0 auto;
 }
 
@@ -27,15 +39,15 @@
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: auto !important;
+    overflow-y: visible !important;
     -webkit-overflow-scrolling: touch;
     display: block !important;
     box-sizing: border-box;
-    padding: 0 4px !important;
+    padding: 0 !important;
   }
 
   .performance-table-container.backtest-table-width .fund-table {
-    width: 100% !important;
-    min-width: 850px !important; /* Prevents columns from crushing and enables horizontal scrolling */
-    margin: 0 !important;
+    width: auto !important;
+    min-width: 850px !important;
   }
 }
