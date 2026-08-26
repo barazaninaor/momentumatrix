@@ -113,6 +113,35 @@
   white-space: nowrap;
 }
 
+/* ========================================================
+   STICKY FIRST COLUMN (גלילה מקובעת לעמודה הראשונה)
+   ======================================================== */
+.fund-table th:first-child,
+.fund-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: #0b131e; /* תואם לרקע הכללי למניעת שקיפות */
+  border-right: 2px solid #1e293b;
+}
+
+/* שמירת צבע הרקע הייעודי של כותרת העמודה הראשונה */
+.fund-table thead th:first-child {
+  background-color: #111c2e;
+  z-index: 3;
+}
+
+/* שמירת צבע הרקע של שורות השנים בעמודה הראשונה */
+.fund-table tr td.year-cell:first-child,
+.fund-table tr td.benchmark-year-cell:first-child {
+  background-color: #0f172a;
+}
+
+.benchmark-row td.benchmark-year-cell:first-child {
+  background-color: #0b131e !important;
+}
+/* ======================================================== */
+
 /* Table header cells configuration */
 .fund-table thead th {
   background-color: #111c2e;
