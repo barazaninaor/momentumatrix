@@ -15,6 +15,7 @@
 
 .table-responsive {
   width: 100%;
+  overflow-x: visible;
 }
 
 .transactions-table {
@@ -29,7 +30,7 @@
 
 .transactions-table th,
 .transactions-table td {
-  padding: 14px 16px; /* תואם בדיוק למידות של טבלת הפורטפוליו */
+  padding: 14px 16px;
   text-align: center;
   vertical-align: middle;
   font-size: 14px;
@@ -37,14 +38,15 @@
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* רוחב עמודות מדויק */
-.transactions-table th.index-col, .transactions-table td:nth-child(1) { width: 70px; }
-.transactions-table th:nth-child(2), .transactions-table td:nth-child(2) { width: 130px; }
-.transactions-table th:nth-child(3), .transactions-table td:nth-child(3) { width: 150px; }
-.transactions-table th:nth-child(4), .transactions-table td:nth-child(4) { width: 160px; }
+/* רוחב עמודות מדויק (8 עמודות סה"כ) */
+.transactions-table th.index-col, .transactions-table td:nth-child(1) { width: 60px; }
+.transactions-table th:nth-child(2), .transactions-table td:nth-child(2) { width: 110px; }
+.transactions-table th:nth-child(3), .transactions-table td:nth-child(3) { width: 100px; }
+.transactions-table th:nth-child(4), .transactions-table td:nth-child(4) { width: 180px; }
 .transactions-table th:nth-child(5), .transactions-table td:nth-child(5) { width: 130px; }
-.transactions-table th:nth-child(6), .transactions-table td:nth-child(6) { width: 150px; }
-.transactions-table th:nth-child(7), .transactions-table td:nth-child(7) { width: 160px; }
+.transactions-table th:nth-child(6), .transactions-table td:nth-child(6) { width: 120px; }
+.transactions-table th:nth-child(7), .transactions-table td:nth-child(7) { width: 130px; }
+.transactions-table th:nth-child(8), .transactions-table td:nth-child(8) { width: 140px; }
 
 .transactions-table th:last-child,
 .transactions-table td:last-child {
@@ -83,6 +85,16 @@
   font-weight: 700;
   color: #f3f4f6;
   letter-spacing: 0.03em;
+}
+
+.company-cell {
+  color: #94a3b8;
+  font-size: 13px;
+  text-align: left !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .date-cell {
@@ -177,4 +189,39 @@
 
 .error-state {
   color: #f87171;
+}
+
+/* Mobile responsive adjustments */
+@media screen and (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 16px;
+  }
+
+  .transactions-table {
+    min-width: 980px;
+  }
+
+  .transactions-table th,
+  .transactions-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* נעילת העמודה הראשונה (#) בזמן גלילה אופקית במובייל */
+  .transactions-table th:first-child,
+  .transactions-table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #111827;
+    z-index: 2;
+    border-right: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .transactions-table th:first-child {
+    background-color: #1f293d;
+  }
 }

@@ -16,6 +16,19 @@ export const Portfolio = () => {
   // State management for portfolio data and loading status
   const [portfolioData, setPortfolioData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  
+  // State to track if the screen is mobile based on window width
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
+
+  useEffect(() => {
+    // Handler to update mobile state on window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     // Define the API base URL using Vite's environment standard with a local fallback
@@ -127,16 +140,16 @@ export const Portfolio = () => {
                     const weightVal = Number(item.Weight || 0);
                     const sectorName = item.Sector || item.sector || item.GICS_Sector || item.gics_sector || "N/A";
                     
-                    // שליפת שם החברה מהשדה שהשרת מחזיר
+                    // Retrieve company name from server fields
                     const companyName = item.company_name || item.Company_Name || item.companyName || "";
 
                     return (
                       <tr key={index}>
-                        {/* טיקר ושם החברה משולבים באותה עמודה */}
+                        {/* Ticker & Company Name combined cell */}
                         <td className="ticker-cell">
                           <div className="ticker-symbol">{item.Ticker}</div>
                           {companyName && companyName !== item.Ticker && (
-                            <div className="company-name" style={{ fontSize: "0.8rem", color: "#9ca3af", marginTop: "2px" }}>
+                            <div className="company-name">
                               {companyName}
                             </div>
                           )}
@@ -173,8 +186,9 @@ export const Portfolio = () => {
                     data={sectorData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={70}
-                    outerRadius={110}
+                    // עובר אוטומטית לגודל קטן במובייל, ולגודל המקורי בדסקטופ
+                    innerRadius={isMobile ? 30 : 70}
+                    outerRadius={isMobile ? 65 : 110}
                     paddingAngle={4}
                     dataKey="value"
                     label={(entry: any) => `${entry.name}: ${Number(entry.value).toFixed(1)}%`}

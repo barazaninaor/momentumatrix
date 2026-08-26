@@ -27,11 +27,16 @@
 /* Portfolio positions table wrapper */
 .portfolio-table-wrapper {
   width: 100%;
+  overflow-x: visible;
+  overflow-y: visible;
+  display: block;
+  padding-bottom: 0;
 }
 
 /* Core table layout properties */
 .portfolio-table {
   width: 100%;
+  min-width: unset;
   border-collapse: collapse;
   background-color: #111827;
   border-radius: 10px;
@@ -99,8 +104,12 @@
   font-size: 11px;
   color: #94a3b8;
   font-weight: 400;
-  margin-top: 2px;
+  margin-top: 1px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+  line-height: 1.1;
 }
 
 /* Positive financial metric text color */
@@ -141,22 +150,55 @@
   align-items: center;
 }
 
-/* Mobile responsive adjustments enabling horizontal scroll */
+/* Mobile responsive adjustments */
 @media screen and (max-width: 768px) {
   .portfolio-table-wrapper {
     overflow-x: auto;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 12px;
+    padding-bottom: 16px;
+    position: relative;
   }
 
   .portfolio-table {
-    min-width: 650px;
+    min-width: 1050px;
   }
 
   .portfolio-table th,
   .portfolio-table td {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 10px 8px;
+    font-size: 12px;
     white-space: nowrap;
+  }
+
+  .portfolio-table th:first-child,
+  .portfolio-table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #111827;
+    z-index: 2;
+    border-right: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .portfolio-table th:first-child {
+    background-color: #1f293d;
+  }
+
+  /* התאמות לגרף העוגה במובייל: עוגה קטנה יותר, טקסט גדול וברור */
+  .sector-chart-section {
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  .sector-chart-section .chart-container {
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  /* הגדלת הכתב של התוויות סביב העוגה */
+  .sector-chart-section text {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    fill: #f3f4f6 !important;
   }
 }

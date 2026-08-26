@@ -11,6 +11,9 @@ interface Transaction {
   portfolio_id: number;
   operation: string;
   ticker: string;
+  company_name?: string;
+  Company_Name?: string;
+  companyName?: string;
   shares: number;
   price: number;
   timestamp: string;
@@ -65,6 +68,7 @@ export const Transactions = () => {
                     <th className="index-col">#</th>
                     <th>Operation</th>
                     <th>Ticker</th>
+                    <th>Company</th>
                     <th>Date</th>
                     <th className="text-right">Shares</th>
                     <th className="text-right">Price</th>
@@ -77,6 +81,7 @@ export const Transactions = () => {
                     const totalValue = tx.shares * tx.price;
                     const formattedDate = tx.timestamp ? tx.timestamp.split("T")[0] : "";
                     const rowNumber = startIndex + index + 1;
+                    const companyName = tx.company_name || tx.Company_Name || tx.companyName || "-";
 
                     return (
                       <tr key={tx.id}>
@@ -87,6 +92,7 @@ export const Transactions = () => {
                           </span>
                         </td>
                         <td className="ticker-cell">{tx.ticker}</td>
+                        <td className="company-cell">{companyName}</td>
                         <td className="date-cell">{formattedDate}</td>
                         <td className="text-right">{tx.shares.toLocaleString()}</td>
                         <td className="text-right">${tx.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
