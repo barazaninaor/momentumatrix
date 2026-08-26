@@ -12,8 +12,8 @@
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.5),
     0 0 20px rgba(0, 210, 255, 0.08);
-  margin: 30px auto 0 auto; /* Centers the form horizontally and adds natural spacing below the title */
-  margin-top: 60px;
+  margin: 60px auto 0 auto; /* Centers the form horizontally and adds natural spacing below the title */
+  box-sizing: border-box;
 }
 
 /* Form group (label + input) */
@@ -44,6 +44,8 @@
   outline: none;
   /* Forces browser native elements and autofill dropdowns to adopt dark mode style */
   color-scheme: dark;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 /* Input focus state */
@@ -95,4 +97,35 @@
 
 .login-link-container .Button {
   width: 100%;
+}
+
+/* Mobile responsive adjustments restricted strictly to screens up to 768px */
+@media screen and (max-width: 768px) {
+  .login-form {
+    padding: 20px 16px !important;
+    margin: 24px 12px 0 12px !important;
+    width: calc(100% - 24px) !important;
+    max-width: 100% !important;
+    border-radius: 12px !important;
+    gap: 16px !important;
+  }
+
+  .form-group input {
+    padding: 10px 14px !important;
+    font-size: 16px !important; /* Keeps 16px to prevent automatic iOS zoom on focus */
+  }
+
+  .form-group label {
+    font-size: 13px !important;
+  }
+
+  .secondary-toggle-btn {
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+    width: 100%;
+  }
+
+  .login-link-container {
+    margin-top: 14px !important;
+  }
 }

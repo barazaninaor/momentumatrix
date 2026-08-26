@@ -15,8 +15,23 @@
   padding: 0;
 }
 
-/* מחזיר את הטבלה בעמוד הבקטסט לגודל של 70% המקורי בדיוק כפי שהיה */
+/* Restores the backtest table width to 70% on desktop screens as originally configured */
 .performance-table-container.backtest-table-width .fund-table {
   width: 70% !important;
   margin: 0 auto;
+}
+
+/* Mobile responsive override to expand table to 100% width and enable scrolling */
+@media screen and (max-width: 768px) {
+  .performance-table-container.backtest-table-width {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .performance-table-container.backtest-table-width .fund-table {
+    width: 100% !important;
+    min-width: 850px;
+    margin: 0 !important;
+  }
 }

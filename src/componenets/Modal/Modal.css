@@ -9,6 +9,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .modal-content {
@@ -20,6 +22,7 @@
   max-width: 400px;
   width: 90%;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
 .modal-title {
@@ -50,4 +53,35 @@
 
 .modal-button-wrapper {
   display: inline-block;
+}
+
+/* Mobile responsive adjustments restricted strictly to screens up to 768px */
+@media screen and (max-width: 768px) {
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal-content {
+    padding: 20px 16px !important;
+    max-width: 320px !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+  }
+
+  .modal-title {
+    font-size: 18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .modal-text {
+    font-size: 13px !important;
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+  }
+
+  .modal-email {
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
+    word-break: break-all;
+  }
 }

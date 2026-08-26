@@ -1,6 +1,7 @@
 import naorImg from "../../assets/naor.jpg";
 import { GlassCard } from "../../componenets/GlassCard/GlassCard";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
+import { ResponsiveVideo } from "../../componenets/ResponsiveVideo/ResponsiveVideo";
 import "./About.css";
 
 export const About = () => {
@@ -24,17 +25,10 @@ export const About = () => {
           <p>My systems are built to bridge the gap between advanced market mechanics and modern software architecture, delivering precision, speed, and systematic edge to the trading world.</p>
         </div>
 
-        <div className="video-container">
-          <iframe
-            width="100%"
-            height="400"
-            src="https://www.youtube.com/embed/gbMWRa0guhg?hl=en"
-            title="Death as a Motive for Life"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-        </div>
+        <ResponsiveVideo 
+          videoUrl="https://www.youtube.com/embed/gbMWRa0guhg?hl=en" 
+          title="Death as a Motive for Life" 
+        />
       </GlassCard>
     </div>
   );

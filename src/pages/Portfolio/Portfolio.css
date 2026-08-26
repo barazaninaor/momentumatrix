@@ -156,8 +156,11 @@
     overflow-x: auto;
     overflow-y: visible;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 16px;
+    padding-bottom: 20px;
     position: relative;
+    width: 100%;
+    /* Enables smooth and safe horizontal scrolling without clipping on narrow screens */
+    display: block;
   }
 
   .portfolio-table {
@@ -171,6 +174,7 @@
     white-space: nowrap;
   }
 
+  /* Sticky first column (Ticker/Company) so it stays pinned to the left during horizontal scroll */
   .portfolio-table th:first-child,
   .portfolio-table td:first-child {
     position: sticky;
@@ -184,7 +188,7 @@
     background-color: #1f293d;
   }
 
-  /* התאמות לגרף העוגה במובייל: עוגה קטנה יותר, טקסט גדול וברור */
+  /* Mobile adjustments for the sector pie chart: compact padding and visible container */
   .sector-chart-section {
     padding: 12px !important;
     overflow: visible !important;
@@ -195,7 +199,7 @@
     width: 100% !important;
   }
 
-  /* הגדלת הכתב של התוויות סביב העוגה */
+  /* Increase font size of chart labels for better mobile readability */
   .sector-chart-section text {
     font-size: 12px !important;
     font-weight: 600 !important;

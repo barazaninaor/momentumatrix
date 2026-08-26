@@ -9,20 +9,28 @@
   }
 }
 
+.about-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
 .glass-card {
   width: 60%;
   max-width: 900px;
-  /* שקיפות כהה ועמוקה שתשמור על קונטרסט מעולה */
+  /* Deep dark transparency preserving high contrast */
   background: rgba(15, 8, 30, 0.65); 
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   padding: 50px;
   border-radius: 24px;
   
-  /* נקודת האמצע: קו של 1.5px עם שקיפות 0.22 – חד וברור מספיק כדי שיראו את הגבולות, אבל לא בוהק מדי */
+  /* Sharp and clear border frame */
   border: 1.5px solid rgba(255, 255, 255, 0.22);
   
-  /* הילה מאוזנת שנותנת קונטרסט נקי מסביב לקו */
+  /* Balanced inner glow and shadow effects */
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9),
               0 0 30px rgba(0, 240, 255, 0.12),
               inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -32,7 +40,7 @@
   color: white;
   box-sizing: border-box;
 
-  /* אנימציית הופעה מושהית וחלקה */
+  /* Smooth delayed entrance animation */
   animation: fadeInCard 0.6s ease-out 0.2s both;
 }
 
@@ -40,6 +48,67 @@
   .glass-card {
     width: 90%;
     padding: 30px;
+  }
+}
+
+/* Mobile-only adjustments matching strategy design layout perfectly */
+@media screen and (max-width: 768px) {
+  .about-page {
+    padding: 12px 8px !important; /* Restore outer breathing room to prevent edge clipping */
+    margin: 0 !important;
+  }
+
+  .about-page .glass-card {
+    padding: 16px 12px !important; /* Balanced inner card padding */
+    margin: 0 auto !important;     /* Center the card perfectly */
+    width: 100% !important;        /* Full width within the padded container */
+    box-sizing: border-box;
+    border-radius: 16px;
+  }
+
+  .about-header-title {
+    font-size: 1.5rem !important;
+    margin: 4px 0 6px 0 !important;
+  }
+
+  .about-page .subtitle {
+    font-size: 0.9rem !important;
+    margin-bottom: 14px !important;
+  }
+
+  .profile-img {
+    width: 120px !important;
+    height: 120px !important;
+    margin-bottom: 16px !important;
+    border-width: 4px !important;
+  }
+
+  /* Mobile quote section styling adjustments */
+  .about-page .quote {
+    padding: 12px 8px !important;
+    margin: 16px 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    font-size: 0.88rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .quote-author {
+    font-size: 0.75rem !important;
+    margin-top: 8px !important;
+  }
+
+  /* Text paragraphs mobile alignment and typography */
+  .about-page p, 
+  .about-page .description-text p {
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 12px !important;
+    text-align: left !important;
+  }
+
+  .video-container {
+    margin-top: 20px !important;
   }
 }
 
