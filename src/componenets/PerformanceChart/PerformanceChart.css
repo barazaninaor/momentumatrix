@@ -1,3 +1,4 @@
+/* Main section container */
 .sector-chart-section {
   background-color: #0c0d0e;
   border: 1px solid #1f2124;
@@ -5,18 +6,21 @@
   padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   width: 100%;
+  max-width: 100%; /* Prevent container from overflowing parent */
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Include padding and border in element's total width */
+  overflow: hidden; /* Ensure inner elements don't spill out */
 }
 
+/* Independent title styling */
 .chart-independent-title {
   color: #f7f8f8 !important;
-  font-size: 42px !important; /* הוקטן מעט ל-42px כדי להימנע מחריגה מוגזמת, או השאר 50px אם תרצה */
+  font-size: 36px !important; /* Scaled down slightly for mobile safety */
   font-weight: 500 !important;
   line-height: 1.2 !important;
-  margin: 30px auto 16px auto !important;
+  margin: 20px auto 16px auto !important;
   width: 100% !important;
   max-width: 100% !important;
   text-align: center !important;
@@ -25,48 +29,58 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  box-sizing: border-box;
+  word-break: break-word; /* Prevent long titles from overflowing */
 }
 
+/* Benchmark selection toolbar */
 .chart-benchmark-toolbar {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  background-color: #16181c;
-  padding: 12px 20px;
-  border-radius: 8px;
-  border: 1px solid #1f2124;
-  width: fit-content;
-  margin: 10px auto 20px auto;
-}
-
-.chart-toolbar {
-  display: flex;
+  flex-direction: column; /* Stack vertically on small screens to prevent overflow */
   justify-content: center;
   align-items: center;
   gap: 10px;
+  background-color: #16181c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #1f2124;
+  width: 100%;
+  max-width: 100%;
+  margin: 10px auto 16px auto;
+  box-sizing: border-box;
+}
+
+/* Main time-range and filters toolbar */
+.chart-toolbar {
+  display: flex;
+  flex-direction: column; /* Stack controls vertically on mobile to avoid horizontal overflow */
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   background: #16181c;
-  padding: 10px 14px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid #1f2124;
   margin: 0 auto 15px auto;
-  width: fit-content;
-  min-height: 52px;
-  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
+/* Time range buttons container */
 .time-range-buttons {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
 }
 
 .range-btn {
   background: #212529;
   color: #fff;
   border: none;
-  padding: 5px 10px;
+  padding: 6px 10px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
@@ -78,12 +92,16 @@
   background: #3b82f6;
 }
 
+/* Custom date inputs wrapper */
 .custom-date-inputs {
   display: flex;
+  flex-wrap: wrap; /* Wrap elements if screen is too narrow */
+  justify-content: center;
   align-items: center;
   gap: 8px;
-  border-left: 1px solid #374151;
-  padding-left: 10px;
+  border-left: none; /* Remove left border on mobile stacking */
+  padding-left: 0;
+  width: 100%;
   transition: opacity 0.2s;
 }
 
@@ -105,6 +123,8 @@
   border-radius: 6px;
   font-size: 13px;
   color-scheme: dark;
+  width: 110px; /* Fixed standard width for date inputs */
+  max-width: 100%;
 }
 
 .date-separator {
@@ -112,15 +132,18 @@
   font-size: 13px;
 }
 
+/* Chart container wrapper */
 .chart-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* אפקטי זוהר לקווים השונים בגרף */
+/* Glow effects for different lines */
 .momentu-matrix-line path {
   filter: drop-shadow(0 0 2px #ffffff) 
           drop-shadow(0 0 6px #00f0ff) 
@@ -150,4 +173,30 @@
 .qqq-line path,
 .dia-line path {
   transition: d 0.3s ease-in-out;
+}
+
+/* Desktop screen adjustments (min-width: 768px) */
+@media screen and (min-width: 768px) {
+  .chart-benchmark-toolbar {
+    flex-direction: row;
+    width: fit-content;
+    padding: 12px 20px;
+  }
+
+  .chart-toolbar {
+    flex-direction: row;
+    width: fit-content;
+    padding: 10px 14px;
+  }
+
+  .custom-date-inputs {
+    border-left: 1px solid #374151;
+    padding-left: 10px;
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
+  .chart-independent-title {
+    font-size: 42px !important;
+  }
 }

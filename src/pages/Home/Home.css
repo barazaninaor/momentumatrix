@@ -1,10 +1,13 @@
+/* Main Home Page container */
 .home-page {
   display: flex;
   flex-direction: column;
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px 40px 24px;
+  padding: 32px 16px 40px 16px; /* Adjusted padding for better mobile margins */
+  box-sizing: border-box;
+  width: 100%;
 }
 
 /* Hero Section */
@@ -15,39 +18,47 @@
   flex-direction: column;
   align-items: center;
   gap: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Chart Wrapper container */
 .home-chart-wrapper {
   width: 100%;
   max-width: 1150px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .home-chart-wrapper .sector-chart-section {
-  padding: 24px 20px 16px 20px !important; /* צמצום הריפוד התחתון בתוך הקופסה של הגרף */
-  margin: 0 auto 4px auto !important;     /* צמצום המרווח החיצוני מתחת לגרף */
+  padding: 24px 16px 16px 16px !important; /* Reduced internal padding for mobile alignment */
+  margin: 0 auto 4px auto !important; 
+  box-sizing: border-box;
 }
 
 .home-chart-wrapper .chart-container {
   width: 100% !important;
   max-width: 100% !important;
-  height: 440px !important;
+  height: 380px !important; /* Adjusted height for standard mobile view */
 }
 
 .home-chart-wrapper .recharts-responsive-container {
-  height: 440px !important;
+  height: 380px !important;
 }
 
-/* צמצום הרווח העליון של כותרת האסטרטגיה כדי שתתקרב לגרף */
+/* Strategy description title - scaled down for normal appearance */
 .home-strategy-title {
-  font-size: 1.7rem;
-  font-weight: 600;
-  line-height: 1.4;
+  font-size: 1.25rem; /* Scaled down for mobile readability */
+  font-weight: 500;
+  line-height: 1.5;
   text-align: center;
   max-width: 1050px;
-  margin: 4px auto 12px auto !important;
+  width: 100%;
+  margin: 12px auto 16px auto !important;
   letter-spacing: -0.01em;
   color: #8a8f98;
+  box-sizing: border-box;
+  padding: 0 10px;
 }
 
 /* Card section below the strategy title */
@@ -56,16 +67,18 @@
   display: flex;
   justify-content: center;
   margin-top: 8px;
+  box-sizing: border-box;
 }
 
 .hero-card {
   width: 100%;
   max-width: 1050px;
-  padding: 24px !important;
+  padding: 20px !important;
+  box-sizing: border-box;
 }
 
 .hero-subtitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #e2e8f0;
   max-width: 900px;
   line-height: 1.5;
@@ -78,6 +91,7 @@
   display: flex;
   justify-content: center;
   gap: 16px;
+  width: 100%;
 }
 
 .btn-primary {
@@ -119,24 +133,27 @@
 /* Features Grid Section */
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .features .card, .features > div {
-  padding: 24px !important;
+  padding: 20px !important;
+  box-sizing: border-box;
 }
 
 .features h3 {
   color: #00f0ff;
-  font-size: 1.15rem;
-  margin-bottom: 10px;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
   text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
 }
 
 .features p {
   color: #94a3b8;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.5;
   margin: 0;
 }
@@ -144,25 +161,28 @@
 /* Footer Quote Section */
 .footer-quote-section {
   margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .quote-card {
-  padding: 20px 24px !important;
+  padding: 20px !important;
+  box-sizing: border-box;
 }
 
 .quote p {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #cbd5e1;
   margin: 0 0 8px 0;
   font-style: italic;
 }
 
 .quote span {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #64748b;
 }
 
-/* הגדרות מעבר (Transition) גלובליות לכל הכרטיסיות */
+/* Global transition properties for all cards */
 .card, 
 .hero-card, 
 .quote-card,
@@ -170,7 +190,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* אפקט הובר גלובלי לבן, בולט ומגדיל את הכרטיסייה */
+/* Global hover effect for cards */
 .card:hover, 
 .hero-card:hover, 
 .quote-card:hover,
@@ -179,6 +199,17 @@
   border-width: 1.5px !important;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.3), 0 6px 24px rgba(0, 0, 0, 0.6) !important;
   transform: translateY(-4px) scale(1.02);
+}
+
+/* Responsive adjustments for desktop and mobile screens */
+@media screen and (min-width: 768px) {
+  .home-strategy-title {
+    font-size: 1.7rem; /* Restore larger font size for desktop viewports */
+  }
+  
+  .home-page {
+    padding: 32px 24px 40px 24px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -190,5 +221,6 @@
   .btn-primary, .btn-secondary {
     width: 100%;
     text-align: center;
+    box-sizing: border-box;
   }
 }

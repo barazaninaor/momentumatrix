@@ -49,6 +49,14 @@
   white-space: nowrap;
 }
 
+/* Wrapper for links and right actions */
+.navbar-menu-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 3;
+}
+
 .navbar-links {
   display: flex;
   align-items: center;
@@ -120,6 +128,27 @@
   color: #ffffff;
 }
 
+/* Hamburger Toggle Button (Hidden on desktop) */
+.navbar-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.navbar-toggle span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .NavBar {
@@ -128,5 +157,69 @@
   }
   .navbar-links {
     gap: 15px;
+  }
+}
+
+/* Mobile adjustments (max-width: 768px) */
+@media (max-width: 768px) {
+  .NavBar {
+    height: 80px;
+    padding: 0 20px;
+    position: relative;
+  }
+
+  .navbar-toggle {
+    display: flex; /* Show hamburger on mobile */
+  }
+
+  /* Hide menu container by default on mobile */
+  .navbar-menu-container {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: #0c0d0e;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    gap: 20px;
+    border-bottom: 1px solid #1f2124;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+    z-index: 999;
+    box-sizing: border-box;
+  }
+
+  /* Show menu when active state is triggered via JS */
+  .navbar-menu-container.active {
+    display: flex;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .navbar-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logged-in-container,
+  .logged-out-container {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .navbar-brand {
+    font-size: 20px;
+  }
+
+  .navbar-logo-icon {
+    width: 40px;
+    height: 40px;
   }
 }

@@ -22,6 +22,7 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
   const showTimer = isLoggedIn && !isRegularUser;
 
   const [isTokenExpiredModalOpen, setIsTokenExpiredModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Mobile hamburger menu state
 
   // Initial state setup from localStorage if a saved expiration time exists
   const [timeLeft, setTimeLeft] = useState<string>(() => {
@@ -45,6 +46,7 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
     localStorage.removeItem("token_expiration");
     localStorage.removeItem("token_issued_at");
     setIsTokenExpiredModalOpen(false);
+    setIsMenuOpen(false);
     navigate("/"); // Redirects to the home page upon token expiration or logout
   };
 
@@ -127,73 +129,86 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
     };
   }, [isRegularUser, isLoggedIn]);
 
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
     <>
       <nav className="NavBar">
         <div className="navbar-left">
-          <NavLink to="/" className="navbar-logo-wrapper">
+          {/* Hamburger Menu Toggle Button for Mobile */}
+          <button 
+            className={`navbar-toggle ${isMenuOpen ? "active" : ""}`} 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle navigation"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          <NavLink to="/" className="navbar-logo-wrapper" onClick={closeMenu}>
             <img src={logoImg} alt="MomentuMatrix Logo" className="navbar-logo-icon" />
           </NavLink>
-          <NavLink to="/" className="navbar-brand">
+          <NavLink to="/" className="navbar-brand" onClick={closeMenu}>
             MomentuMatrix
           </NavLink>
-          <NavLink to="/" className="navbar-logo-wrapper">
-            <img src={logoImg} alt="MomentuMatrix Logo" className="navbar-logo-icon" />
-          </NavLink>
         </div>
 
-        <div className="navbar-links">
-          {theArr.map((curr) => {
-            const isHome = curr.hrefStr === "/";
-            return (
-              <div className="navItem" key={curr.hrefStr}>
-                <NavLink to={curr.hrefStr} end={isHome}>
-                  {curr.displayStr}
+        {/* Container for links and right actions that collapses on mobile */}
+        <div className={`navbar-menu-container ${isMenuOpen ? "active" : ""}`}>
+          <div className="navbar-links">
+            {theArr.map((curr) => {
+              const isHome = curr.hrefStr === "/";
+              return (
+                <div className="navItem" key={curr.hrefStr} onClick={closeMenu}>
+                  <NavLink to={curr.hrefStr} end={isHome}>
+                    {curr.displayStr}
+                  </NavLink>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="navbar-right">
+            {isLoggedIn ? (
+              <div className="logged-in-container">
+                <span className="logged-in-text">
+                  Logged In
+                </span>
+
+                {showTimer && (
+                  <div className="token-expiry-timer">
+                    expired in: {timeLeft}
+                  </div>
+                )}
+
+                {isRegularUser && (
+                  <div className="navbar-action-wrapper" onClick={() => { closeMenu(); navigate("/generate-token"); }}>
+                    <Button text="Generate Token" variant="solid" />
+                  </div>
+                )}
+
+                {isRegularUser && (
+                  <div className="navbar-action-wrapper" onClick={() => { closeMenu(); navigate("/change-password"); }}>
+                    <Button text="Edit" variant="solid" />
+                  </div>
+                )}
+
+                <div className="navbar-action-wrapper logout-btn-wrapper" onClick={handleLogout}>
+                  <Button text="Log Out" variant="solid" />
+                </div>
+              </div>
+            ) : (
+              <div className="logged-out-container">
+                <NavLink to="/token-login" className="navbar-login-link" onClick={closeMenu}>
+                  <Button text="Token Access" variant="solid" />
+                </NavLink>
+                <NavLink to="/login" className="navbar-login-link" onClick={closeMenu}>
+                  <Button text="Log in" variant="solid" />
                 </NavLink>
               </div>
-            );
-          })}
-        </div>
-
-        <div className="navbar-right">
-          {isLoggedIn ? (
-            <div className="logged-in-container">
-              <span className="logged-in-text">
-                Logged In
-              </span>
-
-              {showTimer && (
-                <div className="token-expiry-timer">
-                  expired in: {timeLeft}
-                </div>
-              )}
-
-              {isRegularUser && (
-                <div className="navbar-action-wrapper" onClick={() => navigate("/generate-token")}>
-                  <Button text="Generate Token" variant="solid" />
-                </div>
-              )}
-
-              {isRegularUser && (
-                <div className="navbar-action-wrapper" onClick={() => navigate("/change-password")}>
-                  <Button text="Edit" variant="solid" />
-                </div>
-              )}
-
-              <div className="navbar-action-wrapper logout-btn-wrapper" onClick={handleLogout}>
-                <Button text="Log Out" variant="solid" />
-              </div>
-            </div>
-          ) : (
-            <div className="logged-out-container">
-              <NavLink to="/token-login" className="navbar-login-link">
-                <Button text="Token Access" variant="solid" />
-              </NavLink>
-              <NavLink to="/login" className="navbar-login-link">
-                <Button text="Log in" variant="solid" />
-              </NavLink>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </nav>
 
