@@ -32,19 +32,20 @@
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   display: block;
+  position: relative;
   padding-bottom: 8px;
 }
 
-/* Core table layout properties */
+/* Core table layout properties - מעבר ל-separate כדי לאפשר sticky אמיתי */
 .portfolio-table {
   width: 100%;
   min-width: 1050px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   background-color: #111827;
-  border-radius: 10px;
-  overflow: hidden;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
 }
 
 /* Cell padding and alignment configuration */
@@ -56,6 +57,8 @@
   font-size: 14px;
   font-variant-numeric: tabular-nums;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-clip: padding-box;
 }
 
 /* רוחב עמודות מוגדר מראש למניעת תקיעות וקפיצות עיצוב */
@@ -67,22 +70,25 @@
 .portfolio-table th:nth-child(6), .portfolio-table td:nth-child(6) { width: 120px; }
 .portfolio-table th:nth-child(7), .portfolio-table td:nth-child(7) { width: 130px; }
 .portfolio-table th:nth-child(8), .portfolio-table td:nth-child(8) { width: 140px; }
+.portfolio-table th:nth-child(9), .portfolio-table td:nth-child(9) { width: 120px; }
+.portfolio-table th:nth-child(10), .portfolio-table td:nth-child(10) { width: 140px; }
+.portfolio-table th:nth-child(11), .portfolio-table td:nth-child(11) { width: 100px; }
 
 /* ========================================================
    GLOBAL STICKY FIRST COLUMN (נעילת העמודה הראשונה תמיד)
    ======================================================== */
 .portfolio-table th:first-child,
 .portfolio-table td:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  background-color: #111827;
-  border-right: 2px solid rgba(255, 255, 255, 0.15);
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 10 !important;
+  background-color: #111827 !important;
+  border-right: 2px solid rgba(255, 255, 255, 0.25) !important;
 }
 
 .portfolio-table th:first-child {
-  background-color: #1f293d;
-  z-index: 3;
+  background-color: #1f293d !important;
+  z-index: 11 !important;
 }
 /* ======================================================== */
 
@@ -103,20 +109,18 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Table row border and transition behavior */
-.portfolio-table tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: background-color 0.15s ease-in-out;
-}
-
 /* Remove border on final table row */
-.portfolio-table tr:last-child {
+.portfolio-table tr:last-child td {
   border-bottom: none;
 }
 
 /* Row hover highlight state */
-.portfolio-table tr:hover {
+.portfolio-table tr:hover td {
   background-color: #1e293b;
+}
+
+.portfolio-table tr:hover td:first-child {
+  background-color: #1e293b !important;
 }
 
 /* Ticker & Company Name combined cell styling */
@@ -203,7 +207,6 @@
     white-space: nowrap !important;
   }
 
-  /* Mobile adjustments for the sector pie chart */
   .sector-chart-section {
     padding: 12px !important;
     overflow: visible !important;
