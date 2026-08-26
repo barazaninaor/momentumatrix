@@ -1,13 +1,9 @@
-/* html {
-  height: 100%;
-  background-color: #030712 !important;
-  /* Prevent automatic text resizing and layout shifts on mobile devices */
-  -webkit-text-size-adjust: 100%;
-} */
-
+/* Base Document Styles */
 html {
   height: 100%;
-  background-color: #ff0000 !important; /* אדום זמני לבדיקה */
+  background-color: #030712 !important; /* ייצור רגיל */
+  /* background-color: #ff0000 !important; */ /* אדום זמני לבדיקה - הסר הערה להחזרה */
+  
   /* Prevent automatic text resizing and layout shifts on mobile devices */
   -webkit-text-size-adjust: 100%;
 }
@@ -15,8 +11,9 @@ html {
 body {
   min-height: 100vh;
   height: 100%;
-  /* רקע אדום זמני לבדיקה */
-  background: #ff0000 !important;
+  background-color: #030712 !important; /* ייצור רגיל */
+  /* background: #ff0000 !important; */ /* אדום זמני לבדיקה - הסר הערה להחזרה */
+  
   background-attachment: fixed !important;
   color: #f7f8f8;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -63,15 +60,13 @@ h1:first-of-type,
   margin-top: 24px;
 }
 
-
 /* ========================================================== */
 /* Global responsive overrides for mobile screens (max-width: 768px) */
 /* ========================================================== */
 @media screen and (max-width: 768px) {
-  /* Switch to a clean solid red background on mobile devices for testing */
   html, body {
-    background: #ff0000 !important;
-    background-color: #ff0000 !important;
+    background-color: #030712 !important;
+    /* background: #ff0000 !important; */ /* אדום זמני למובייל - הסר הערה להחזרה */
   }
 
   /* Hide the subtle grid overlay on mobile to keep the background clean */
