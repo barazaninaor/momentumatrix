@@ -140,7 +140,8 @@ export const Home = () => {
         </Card>
       </section>
 
-      {/* Philosophy / Quote Section at the Bottom */}
+      {/* Philosophy / Quote Section at the Bottom - Commented out */}
+      {/* 
       <section className="footer-quote-section">
         <Card className="quote-card">
           <div className="quote">
@@ -149,6 +150,7 @@ export const Home = () => {
           </div>
         </Card>
       </section>
+      */}
     </div>
   );
 };

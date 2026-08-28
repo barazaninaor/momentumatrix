@@ -16,8 +16,8 @@ export const Strategy = () => {
         <div className="footer-quote-section">
           <div className="quote-card">
             <div className="quote">
-              <p>"Virtue is greedy for danger and does not think about what it is going to suffer but what it is striving toward."</p>
-              <span>— Seneca</span>
+              <p>"The method I propose does not consist in changing the soil but, like proper crop rotation, consists in changing the method of cultivation and the kinds of crops."</p>
+              <span>— Søren Kierkegaard</span>
             </div>
           </div>
         </div>

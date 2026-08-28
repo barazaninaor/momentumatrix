@@ -15,8 +15,13 @@ export const About = () => {
         <h1 className="about-header-title">Naor Barazani</h1>
         <h2 className="subtitle">Algorithmic Trader & AI Full Stack Engineer</h2>
 
-        <div className="quote">
-          <p>"Life can only be understood backwards; but it must be lived forwards." — Søren Kierkegaard</p>
+        <div className="footer-quote-section">
+          <div className="quote-card">
+            <div className="quote">
+              <p>"And what weapon is as sharp, as penetrating, and thereby as illusive as the eye?"</p>
+              <span>— Søren Kierkegaard</span>
+            </div>
+          </div>
         </div>
 
         <div className="description-text">
