@@ -248,3 +248,37 @@
     font-size: 0.95rem;
   }
 }
+
+/* Video Section Container */
+.home-video-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0; /* Reset padding to align width perfectly */
+  box-sizing: border-box;
+  margin: 40px 0 60px 0;
+}
+
+/* Custom Wrapper matched precisely to the width of the features section above */
+.custom-video-wrapper {
+  width: 100%;
+  max-width: 1320px; /* Adjust this value if needed to match the exact width of your features section */
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(15, 23, 42, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.custom-video-wrapper:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.1);
+}
+
+/* Ensure inner elements fit cleanly within the wrapper */
+.custom-video-wrapper iframe,
+.custom-video-wrapper div {
+  width: 100% !important;
+  border: none !important;
+}

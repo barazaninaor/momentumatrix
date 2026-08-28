@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 
 import "./Home.css";
+import { ResponsiveVideo } from '../../componenets/ResponsiveVideo/ResponsiveVideo';
 
 // Base URL for API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -138,6 +139,16 @@ export const Home = () => {
           <h3>Full Automation</h3>
           <p>Precision execution, risk distribution, and portfolio optimization connected directly to live market channels.</p>
         </Card>
+      </section>
+
+      {/* Video Section עם קלאס עוטף חדש ומבודד */}
+      <section className="home-video-section">
+        <div className="custom-video-wrapper">
+          <ResponsiveVideo 
+            videoUrl="https://www.youtube.com/embed/oAVC9hv-a5w?hl=en" 
+            title="A Trip into the Matrix" 
+          />
+        </div>
       </section>
 
       {/* Philosophy / Quote Section at the Bottom - Commented out */}
