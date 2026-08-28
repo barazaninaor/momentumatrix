@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Modal.css";
 import { Button } from "../Button/Button";
 
@@ -21,6 +21,31 @@ export const Modal: React.FC<ModalProps> = ({
   ),
   showEmail = true
 }) => {
+  // פונקציה לסגירה נקייה שגם משחררת את הפוקוס מהאלמנט הנוכחי בדפדפן
+  const handleClose = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onClose();
+  };
+
+  // הוספת האזנה למקש Escape
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -35,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
           </a>
         )}
         
-        <div className="modal-button-wrapper" onClick={onClose}>
+        <div className="modal-button-wrapper" onClick={handleClose}>
           <Button text="Close" variant="solid" />
         </div>
       </div>
