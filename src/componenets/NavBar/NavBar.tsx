@@ -5,13 +5,11 @@ import type { NavItem } from "../../types/NavBarInfo";
 import { Button } from "../Button/Button";
 import { Modal } from "../Modal/Modal";
 import logoImg from "../../assets/logo.jpg";
+import { api } from "../../services/api";
 
 type NavBarProps = {
   theArr: NavItem[];
 };
-
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
   const navigate = useNavigate();
@@ -92,16 +90,17 @@ export const NavBar: React.FC<NavBarProps> = ({ theArr }) => {
       startInterval(savedExpiration);
     }
 
-    // Call Python server to get the exact expiration time
+    // Call Python server using the central api instance to get the exact expiration time
     const fetchTokenStatusFromDB = async () => {
       try {
         const userEmail = localStorage.getItem("user_email");
         if (!userEmail) return;
 
-        const response = await fetch(`${API_URL}/auth/token-status/${encodeURIComponent(userEmail)}`);
+        // Using the central api instance instead of standard fetch
+        const response = await api.get(`/auth/token-status/${encodeURIComponent(userEmail)}`);
         
-        if (response.ok && isMounted) {
-          const data = await response.json();
+        if (response.status === 200 && isMounted) {
+          const data = response.data;
           console.log("Python Server Expiration Response:", data);
 
           if (data.expired) {

@@ -3,9 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./Login.css";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { Button } from "../../componenets/Button/Button";
-
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+import { api } from "../../services/api";
 
 export const Login = () => {
   const location = useLocation();
@@ -40,23 +38,11 @@ export const Login = () => {
     try {
       if (isEditingPassword) {
         // Send password change request (PUT) to the server
-        const response = await fetch(`${API_URL}/auth/change-password`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            old_password: password,
-            new_password: newPassword,
-          }),
+        await api.put("/auth/change-password", {
+          email,
+          old_password: password,
+          new_password: newPassword,
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.detail || "Failed to change password");
-        }
 
         // Clear tokens and login type on successful password update
         localStorage.removeItem("access_token");
@@ -71,19 +57,9 @@ export const Login = () => {
         }, 2000);
       } else {
         // Send standard login request (POST)
-        const response = await fetch(`${API_URL}/auth/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
+        const response = await api.post("/auth/login", { email, password });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.detail || "Login failed");
-        }
+        const data = response.data;
 
         // Save access token, type, login_type, and user email in localStorage upon successful authentication
         localStorage.setItem("access_token", data.access_token);
@@ -94,7 +70,8 @@ export const Login = () => {
         navigate("/"); 
       }
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+      const errorMsg = err.response?.data?.detail || err.message || "An unexpected error occurred";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
