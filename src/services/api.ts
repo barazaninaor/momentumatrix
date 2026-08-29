@@ -1,18 +1,14 @@
 import axios from 'axios';
 
-// Determine the primary URL based on the environment (localhost for development, AWS DuckDNS with port 8000 for production)
-const PRIMARY_URL = import.meta.env.DEV 
-  ? 'http://localhost:8000' 
-  : (import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org:8000');
-
-// Fallback URL in case the primary server is down
+// Primary and Fallback API URLs
+const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org:8000';
 const FALLBACK_URL = import.meta.env.VITE_RENDER_API_URL || 'https://momentumatrix.onrender.com';
 
 export const api = axios.create({
   baseURL: PRIMARY_URL,
 });
 
-// Response interceptor to handle server downtime and automatically fallback to Render
+// Response interceptor to handle server downtime and fallback to Render automatically
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
