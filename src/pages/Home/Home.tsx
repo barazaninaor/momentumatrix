@@ -3,13 +3,12 @@ import { Card } from "../../componenets/Card/Card";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { PerformanceChart } from "../../componenets/PerformanceChart/PerformanceChart";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+
+// Import central API client configured with dynamic base URL
+import { api } from '../../services/api';
 
 import "./Home.css";
 import { ResponsiveVideo } from '../../componenets/ResponsiveVideo/ResponsiveVideo';
-
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const Home = () => {
   const [selectedBenchmarks, setSelectedBenchmarks] = useState<string[]>([]);
@@ -18,9 +17,10 @@ export const Home = () => {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
+        // Fetch account history and benchmarks using the central API client
         const [historyRes, benchmarksRes] = await Promise.all([
-          axios.get(`${API_URL}/account-history/`),
-          axios.get(`${API_URL}/benchmark/`)
+          api.get('/account-history/'),
+          api.get('/benchmark/')
         ]);
 
         const historyRecords = historyRes.data || [];
@@ -141,7 +141,7 @@ export const Home = () => {
         </Card>
       </section>
 
-      {/* Video Section עם קלאס עוטף חדש ומבודד */}
+      {/* Video Section with isolated custom wrapper */}
       <section className="home-video-section">
         <div className="custom-video-wrapper">
           <ResponsiveVideo 

@@ -6,13 +6,10 @@ import { PerformanceMetricsSummary } from "../../componenets/PerformanceMetricsS
 import { PerformanceCard } from "../../componenets/PerformanceCard/PerformanceCard";
 import { LoadingSpinner } from "../../componenets/LoadingSpinner/LoadingSpinner";
 import { fetchPerformanceAnalysis } from "../../services/performanceService";
-import axios from 'axios';
-import "./Performance.css";
 
-// Base URL for your FastAPI backend (automatically switches to Render in production)
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:8000'
-  : 'https://momentumatrix.onrender.com';
+// Import central API client
+import { api } from "../../services/api";
+import "./Performance.css";
 
 export const Performance: React.FC = () => {
   // Initialize with an empty array so no benchmark is selected by default
@@ -35,10 +32,10 @@ export const Performance: React.FC = () => {
     const fetchChartData = async () => {
       try {
         setIsLoading(true);
-        // Fetch account history and benchmarks in parallel
+        // Fetch account history and benchmarks in parallel using the central api client
         const [historyRes, benchmarksRes] = await Promise.all([
-          axios.get(`${API_URL}/account-history/`),
-          axios.get(`${API_URL}/benchmark/`)
+          api.get('/account-history/'),
+          api.get('/benchmark/')
         ]);
 
         const historyRecords = historyRes.data || [];
@@ -127,7 +124,7 @@ export const Performance: React.FC = () => {
     try {
       console.log(`Fetching portfolio state for ${year}/${monthNumber} (${monthName})`);
       const portfolioId = 1; 
-      const response = await axios.get(`${API_URL}/transactions/portfolio-state/${portfolioId}/${year}/${monthNumber}`);
+      const response = await api.get(`/transactions/portfolio-state/${portfolioId}/${year}/${monthNumber}`);
       
       setSelectedMonthCard({
         year,

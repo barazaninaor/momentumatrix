@@ -3,8 +3,8 @@ import "./GenerateToken.css";
 import { Button } from "../../componenets/Button/Button";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Import central API client
+import { api } from "../../services/api";
 
 export const GenerateToken = () => {
   const [email, setEmail] = useState<string>("");
@@ -22,26 +22,17 @@ export const GenerateToken = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/generate-token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          email, 
-          duration_minutes: Number(durationMinutes)
-        }),
+      // Using central api client instead of fetch
+      const response = await api.post('/auth/generate-token', {
+        email,
+        duration_minutes: Number(durationMinutes)
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Failed to generate token");
-      }
-
-      setGeneratedToken(data.token);
+      setGeneratedToken(response.data.token);
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+      // Axios stores error response in err.response.data
+      const errorMsg = err.response?.data?.detail || err.message || "Failed to generate token";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -62,7 +53,7 @@ export const GenerateToken = () => {
       <form className="login-form" onSubmit={handleSubmit}>
         {error && <div className="error-message">{error}</div>}
 
-        {/* שדה אימייל */}
+        {/* Email input field */}
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
           <input
@@ -75,6 +66,7 @@ export const GenerateToken = () => {
           />
         </div>
 
+        {/* Duration input field */}
         <div className="form-group">
           <label htmlFor="duration">Validity Duration (Minutes)</label>
           <input
@@ -88,7 +80,7 @@ export const GenerateToken = () => {
           />
         </div>
 
-        {/* כפתור שליחת הטופס הראשי */}
+        {/* Main form submit button */}
         <Button 
           text={loading ? "Generating..." : "Get Token"} 
           variant="solid" 

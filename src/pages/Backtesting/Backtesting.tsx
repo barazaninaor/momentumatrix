@@ -4,29 +4,26 @@ import { LoadingSpinner } from "../../componenets/LoadingSpinner/LoadingSpinner"
 import { PerformanceTable } from '../../componenets/PerformanceTable/PerformanceTable';
 import { PerformanceChart } from '../../componenets/PerformanceChart/PerformanceChart';
 import { PerformanceMetricsSummary } from '../../componenets/PerformanceMetricsSummary/PerformanceMetricsSummary';
-import "./Backtesting.css";
 
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Import central API client
+import { api } from '../../services/api';
+
+import "./Backtesting.css";
 
 export const Backtesting: React.FC = () => {
   const [selectedBenchmarks, setSelectedBenchmarks] = useState<string[]>([]);
   const [rawApiData, setRawApiData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetch backtest data from the server once on component mount
+  // Fetch backtest data from the server using the central api client once on component mount
   useEffect(() => {
     const fetchBacktestData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_URL}/backtest/analysis`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Backtest data loaded successfully:", data);
-          setRawApiData((prev: any) => ({ ...prev, ...data }));
-        } else {
-          console.error("Server returned error status:", response.status);
-        }
+        const response = await api.get('/backtest/analysis');
+        
+        console.log("Backtest data loaded successfully:", response.data);
+        setRawApiData((prev: any) => ({ ...prev, ...response.data }));
       } catch (error) {
         console.error("Failed to fetch backtest performance data:", error);
       } finally {

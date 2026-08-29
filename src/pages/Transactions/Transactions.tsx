@@ -3,8 +3,8 @@ import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { LoadingSpinner } from "../../componenets/LoadingSpinner/LoadingSpinner";
 import "./Transactions.css";
 
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Import central API client
+import { api } from "../../services/api";
 
 interface Transaction {
   id: number;
@@ -27,17 +27,16 @@ export const Transactions = () => {
   const pageSize = 10;
 
   useEffect(() => {
-    fetch(`${API_URL}/transactions/`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch transactions");
-        return res.json();
-      })
-      .then((data) => {
-        setTransactions(data);
+    // Fetch transactions using the central api client
+    api.get('/transactions/')
+      .then((response) => {
+        const result = response.data;
+        setTransactions(result.data || result);
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        const errorMsg = err.response?.data?.detail || err.message || "Failed to fetch transactions";
+        setError(errorMsg);
         setLoading(false);
       });
   }, []);

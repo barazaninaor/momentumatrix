@@ -5,8 +5,8 @@ import "./TokenLogin.css";
 import { MainTitle } from "../../componenets/MainTitle/MainTitle";
 import { Button } from "../../componenets/Button/Button";
 
-// Base URL for API
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Import central API client
+import { api } from "../../services/api";
 
 export const TokenLogin = () => {
   const navigate = useNavigate();
@@ -26,20 +26,9 @@ export const TokenLogin = () => {
     setLoading(true);
 
     try {
-      // Send token login request (POST) to the server
-      const response = await fetch(`${API_URL}/auth/token-login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, token }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Token login failed");
-      }
+      // Send token login request (POST) to the server using the central api client
+      const response = await api.post('/auth/token-login', { email, token });
+      const data = response.data;
 
       // Save access token, type, user email, and expiration time in localStorage
       localStorage.setItem("access_token", data.access_token);
@@ -61,7 +50,8 @@ export const TokenLogin = () => {
       }, 2000);
 
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+      const errorMsg = err.response?.data?.detail || err.message || "An unexpected error occurred";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

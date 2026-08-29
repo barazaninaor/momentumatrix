@@ -12,6 +12,9 @@ import { LoadingSpinner } from "../../componenets/LoadingSpinner/LoadingSpinner"
 import { SubHeading } from "../../componenets/SubHeading/SubHeading";
 import { PortfolioSummary } from "../../componenets/PortfolioSummary/PortfolioSummary";
 
+// Import central API client
+import { api } from "../../services/api";
+
 export const Portfolio = () => {
   // State management for portfolio data and loading status
   const [portfolioData, setPortfolioData] = useState<any>(null);
@@ -31,13 +34,10 @@ export const Portfolio = () => {
   }, []);
 
   useEffect(() => {
-    // Define the API base URL using Vite's environment standard with a local fallback
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
-
-    // Fetch the latest static portfolio data from the backend
-    fetch(`${API_BASE_URL}/static-portfolio/latest`)
-      .then((res) => res.json())
-      .then((result) => {
+    // Fetch the latest static portfolio data from the backend using the central api client
+    api.get('/static-portfolio/latest')
+      .then((response) => {
+        const result = response.data;
         setPortfolioData(result.data || result);
         setLoading(false);
       })
