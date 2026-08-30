@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Primary and Fallback API URLs
-const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org:8000';
+const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org';
 const FALLBACK_URL = import.meta.env.VITE_RENDER_API_URL || 'https://momentumatrix.onrender.com';
 
 export const api = axios.create({
