@@ -11,7 +11,7 @@ const CHECK_INTERVAL = 5 * 60 * 1000; // Try primary again every 5 minutes
 
 export const api = axios.create({
   baseURL: PRIMARY_URL,
-  timeout: 3000,
+  timeout: 3000, // 3 seconds timeout for primary server
 });
 
 // Request interceptor to decide whether to try primary or go straight to fallback
@@ -51,7 +51,7 @@ api.interceptors.response.use(
       lastPrimaryCheckTime = Date.now(); // Mark the time we switched
       
       originalRequest.baseURL = FALLBACK_URL;
-      originalRequest.timeout = 60000; 
+      originalRequest.timeout = 60000; // 60 seconds timeout for Render cold start
       
       if (originalRequest.url && originalRequest.url.startsWith(PRIMARY_URL)) {
         originalRequest.url = originalRequest.url.replace(PRIMARY_URL, '');
