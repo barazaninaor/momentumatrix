@@ -1,42 +1,40 @@
 import axios from 'axios';
 
-// Primary and Fallback API URLs
 const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org';
 const FALLBACK_URL = import.meta.env.VITE_RENDER_API_URL || 'https://momentumatrix.onrender.com';
 
-// State variables to manage fallback and periodic re-checks
-let isUsingFallback = false;
-let lastPrimaryCheckTime = 0;
+// Read initial fallback state from localStorage so it persists across page loads and new tabs
+let isUsingFallback = localStorage.getItem('isUsingFallback') === 'true';
+let lastPrimaryCheckTime = parseInt(localStorage.getItem('lastPrimaryCheckTime') || '0', 10);
 const CHECK_INTERVAL = 5 * 60 * 1000; // Try primary again every 5 minutes
 
 export const api = axios.create({
-  baseURL: PRIMARY_URL,
-  timeout: 3000, // 3 seconds timeout for primary server
+  baseURL: isUsingFallback ? FALLBACK_URL : PRIMARY_URL,
+  timeout: isUsingFallback ? 30000 : 3000, // Longer timeout for Render, 3s for AWS try
 });
 
-// Request interceptor to decide whether to try primary or go straight to fallback
+// Request interceptor to handle URL and timeout adjustments dynamically
 api.interceptors.request.use(
   (config) => {
     const now = Date.now();
     
-    // If we are using fallback, but enough time has passed, give Primary (AWS) another chance
+    // If using fallback, check if interval has passed to retry primary (AWS)
     if (isUsingFallback && (now - lastPrimaryCheckTime > CHECK_INTERVAL)) {
-      isUsingFallback = false; // Reset flag to test primary
+      isUsingFallback = false;
+      localStorage.setItem('isUsingFallback', 'false');
       lastPrimaryCheckTime = now;
+      localStorage.setItem('lastPrimaryCheckTime', now.toString());
     }
 
-    if (isUsingFallback) {
-      config.baseURL = FALLBACK_URL;
-    } else {
-      config.baseURL = PRIMARY_URL;
-    }
+    config.baseURL = isUsingFallback ? FALLBACK_URL : PRIMARY_URL;
+    config.timeout = isUsingFallback ? 30000 : 3000;
     
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle server downtime and fallback automatically
+// Response interceptor to fall back to Render automatically if AWS fails
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -48,10 +46,14 @@ api.interceptors.response.use(
     if ((isNetworkError || isServerError) && !originalRequest._retry && !isUsingFallback) {
       originalRequest._retry = true;
       isUsingFallback = true;
-      lastPrimaryCheckTime = Date.now(); // Mark the time we switched
+      localStorage.setItem('isUsingFallback', 'true');
+      
+      const now = Date.now();
+      lastPrimaryCheckTime = now;
+      localStorage.setItem('lastPrimaryCheckTime', now.toString());
       
       originalRequest.baseURL = FALLBACK_URL;
-      originalRequest.timeout = 60000; // 60 seconds timeout for Render cold start
+      originalRequest.timeout = 30000;
       
       if (originalRequest.url && originalRequest.url.startsWith(PRIMARY_URL)) {
         originalRequest.url = originalRequest.url.replace(PRIMARY_URL, '');
