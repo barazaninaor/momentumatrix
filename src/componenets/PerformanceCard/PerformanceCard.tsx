@@ -160,6 +160,9 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({ year, monthNam
           <div style={{ fontSize: "11px", color: "#8a8aab", textAlign: "center", marginTop: "4px", fontStyle: "italic" }}>
             * Sector weights are equal-weighted per stock.
           </div>
+          <div style={{ fontSize: "11px", color: "#8a8aab", textAlign: "center", marginTop: "4px", fontStyle: "italic" }}>
+            * Differs from main table due to open-to-close calculation.
+          </div>
         </div>
       </div>
     </div>
