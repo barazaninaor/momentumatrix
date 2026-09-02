@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
 
 const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org';
 const FALLBACK_URL = import.meta.env.VITE_RENDER_API_URL || 'https://momentumatrix.onrender.com';
@@ -15,7 +15,7 @@ export const api = axios.create({
 
 // Request interceptor to handle URL and timeout adjustments dynamically
 api.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const now = Date.now();
     
     // If using fallback, check if interval has passed to retry primary (AWS)
@@ -31,19 +31,19 @@ api.interceptors.request.use(
     
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error)
 );
 
 // Response interceptor to fall back to Render automatically if AWS fails
 api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+  (response: AxiosResponse) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     const isNetworkError = error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED' || !error.response;
     const isServerError = error.response && error.response.status >= 500;
 
-    if ((isNetworkError || isServerError) && !originalRequest._retry && !isUsingFallback) {
+    if ((isNetworkError || isServerError) && originalRequest && !originalRequest._retry && !isUsingFallback) {
       originalRequest._retry = true;
       isUsingFallback = true;
       localStorage.setItem('isUsingFallback', 'true');
