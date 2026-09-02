@@ -1,4 +1,5 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
+import axios from 'axios';
+import type { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
 
 const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org';
 const FALLBACK_URL = import.meta.env.VITE_RENDER_API_URL || 'https://momentumatrix.onrender.com';
