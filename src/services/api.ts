@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
 
-const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckdns.org';
+// Hardcoded primary production URL pointing directly to the AWS server via DuckDNS
+const PRIMARY_URL = 'https://momentumatrix.duckdns.org';
 // const FALLBACK_URL = import.meta.env.VITE_RENDER_API_URL || 'https://momentumatrix.onrender.com';
 
 // Read initial fallback state from localStorage so it persists across page loads and new tabs
@@ -11,7 +12,7 @@ const PRIMARY_URL = import.meta.env.VITE_API_URL || 'https://momentumatrix.duckd
 
 export const api = axios.create({
   baseURL: PRIMARY_URL, // isUsingFallback ? FALLBACK_URL : PRIMARY_URL,
-  timeout: 3000, // isUsingFallback ? 30000 : 3000, // Longer timeout for Render, 3s for AWS try
+  timeout: 10000, // isUsingFallback ? 30000 : 10000, // Longer timeout for Render, 10s for AWS try
 });
 
 // Request interceptor to handle URL and timeout adjustments dynamically
@@ -28,7 +29,7 @@ api.interceptors.request.use(
     // }
 
     // config.baseURL = isUsingFallback ? FALLBACK_URL : PRIMARY_URL;
-    // config.timeout = isUsingFallback ? 30000 : 3000;
+    // config.timeout = isUsingFallback ? 30000 : 10000;
     
     return config;
   },
@@ -64,6 +65,12 @@ api.interceptors.response.use(
 
     //   return api(originalRequest);
     // }
+
+    console.error(`[API Error] Request failed for URL: ${error.config?.url}`, {
+      message: error.message,
+      code: error.code,
+      response: error.response?.data,
+    });
 
     return Promise.reject(error);
   }
