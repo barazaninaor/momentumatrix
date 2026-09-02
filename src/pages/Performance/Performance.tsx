@@ -278,13 +278,15 @@ export const Performance: React.FC = () => {
           />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%', maxWidth: '1300px' }}>
-            {/* Performance Table loading the data and pushing it to the parent state */}
+            
+            {/* Performance Table section */}
             <PerformanceTable
               selectedBenchmarks={selectedBenchmarks}
               setSelectedBenchmarks={setSelectedBenchmarks}
               onDataLoaded={handleDataLoaded}
               fetchDataService={fetchPerformanceAnalysis} 
               onMonthClick={handleMonthClick}
+              showNote={true}
             />
 
             {/* Performance Chart rendering the combined portfolio and benchmark timeline */}

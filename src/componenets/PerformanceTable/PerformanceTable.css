@@ -20,6 +20,16 @@
   white-space: nowrap;
 }
 
+.performance-subtitle-note {
+  font-size: 13px;
+  color: #a0a0c0;
+  margin-top: -6px;
+  margin-bottom: 16px;
+  font-style: italic;
+  letter-spacing: 0.3px;
+  text-align: left;
+}
+
 /* Benchmark selection toolbar styling */
 .benchmark-toolbar {
   display: flex;

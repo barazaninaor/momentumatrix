@@ -21,6 +21,7 @@ interface PerformanceTableProps {
   fetchDataService?: () => Promise<any>; 
   className?: string;
   onMonthClick?: (year: number, monthNumber: number, monthName: string) => void;
+  showNote?: boolean; // פרופ אופציונלי להצגת ההערה
 }
 
 export const PerformanceTable: React.FC<PerformanceTableProps> = ({
@@ -29,7 +30,8 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({
   onDataLoaded,
   fetchDataService,
   className = '',
-  onMonthClick
+  onMonthClick,
+  showNote = false
 }) => {
   const [rows, setRows] = useState<MonthlyPerformanceRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -83,8 +85,6 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({
 
     serviceToUse()
       .then((response: any) => {
-        console.log("API Response received in PerformanceTable:", response);
-
         let matrixData: MonthlyPerformanceRow[] = [];
         if (Array.isArray(response)) {
           matrixData = response;
@@ -134,6 +134,13 @@ export const PerformanceTable: React.FC<PerformanceTableProps> = ({
   return (
     <div className={`performance-table-container ${className}`}>
       <div className="performance-table-header">Performance Breakdown</div>
+
+      {/* ההערה תופיע אך ורק אם showNote מוגדר כ-true */}
+      {showNote && (
+        <p className="performance-subtitle-note">
+          * Note: Table returns include cash and capital flows, so numbers may differ from the pure stock-price breakdown shown when clicking a month.
+        </p>
+      )}
 
       <div className="benchmark-toolbar">
         <span className="benchmark-label">Compare ETFs:</span>

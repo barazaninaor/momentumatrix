@@ -46,6 +46,16 @@
     background: #334155;
 }
 
+.performance-subtitle-note {
+  font-size: 13px;
+  color: #a0a0c0;
+  text-align: center;
+  margin-top: -12px;
+  margin-bottom: 20px;
+  font-style: italic;
+  letter-spacing: 0.3px;
+}
+
 /* Ensure the table spans full width with strict column structure */
 .fund-table {
     width: 100% !important;
