@@ -21,6 +21,9 @@ dist-ssr/
 .env.test.local
 .env.production.local
 
+# Sensitive Private Keys
+*.pem
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
