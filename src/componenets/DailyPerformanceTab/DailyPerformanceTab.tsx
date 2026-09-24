@@ -107,7 +107,6 @@ export const DailyPerformanceTab: React.FC<DailyPerformanceTabProps> = ({
             {latestDailyReturn >= 0 ? "+" : ""}
             {latestDailyReturn.toFixed(2)}%
           </span>
-          ביצועי היום האחרון
         </div>
         <div className="summary-card">
           <span className="summary-label">MTD Return</span>

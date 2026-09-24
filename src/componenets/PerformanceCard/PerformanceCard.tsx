@@ -5,7 +5,9 @@ import { DailyPerformanceTab } from "../DailyPerformanceTab/DailyPerformanceTab"
 interface PerformanceCardProps {
   year: number;
   monthName: string;
+  monthNumber?: string | number; // למשל '09' או 9
   data: any; // Allow flexible data structure for both backtest and portfolio state API
+  dailyDataByMonth?: { [key: string]: any[] }; // מפת החודשים הכללית מהשרת (למשל {"2026-09": [...]})
   onClose: () => void;
   showDaily?: boolean; // Prop to optionally show daily performance tab
 }
@@ -32,7 +34,9 @@ const getShortSector = (rawSector?: string): string => {
 export const PerformanceCard: React.FC<PerformanceCardProps> = ({
   year,
   monthName,
+  monthNumber = 1,
   data,
+  dailyDataByMonth,
   onClose,
   showDaily = false,
 }) => {
@@ -58,6 +62,7 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     data?.holdings ||
     data?.positions ||
     (Array.isArray(data) ? data : []);
+
   const sortedStocks = [...rawStocksList].sort(
     (a: any, b: any) =>
       (b.return || b.Return || 0) - (a.return || a.Return || 0),
@@ -102,9 +107,16 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
   const totalReturn =
     data?.return !== undefined ? data.return : data?.total_return || 0;
 
-  // Extract daily performance data securely from various possible keys
+  // Extract daily performance data securely from various possible sources including dailyDataByMonth
+  const formattedMonthNum = String(monthNumber).padStart(2, "0");
+  const monthKey = `${year}-${formattedMonthNum}`;
+
   const dailyData =
-    data?.daily || data?.daily_returns || data?.dailyPerformance || [];
+    data?.daily ||
+    (dailyDataByMonth && dailyDataByMonth[monthKey]) ||
+    data?.daily_returns ||
+    data?.dailyPerformance ||
+    [];
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
