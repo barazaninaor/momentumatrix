@@ -27,7 +27,6 @@ export const Performance: React.FC = () => {
   // State for managing the active month breakdown card modal
   const [selectedMonthCard, setSelectedMonthCard] = useState<{
     year: number;
-    monthNumber: number | string;
     monthName: string;
     data: any;
   } | null>(null);
@@ -136,6 +135,33 @@ export const Performance: React.FC = () => {
     }));
   }, []);
 
+  // Handler to fetch portfolio state holdings when a month is clicked in the performance table
+  const handleMonthClick = useCallback(
+    async (year: number, monthNumber: number, monthName: string) => {
+      try {
+        console.log(
+          `Fetching portfolio state for ${year}/${monthNumber} (${monthName})`,
+        );
+        const portfolioId = 1;
+        const response = await api.get(
+          `/transactions/portfolio-state/${portfolioId}/${year}/${monthNumber}`,
+        );
+
+        setSelectedMonthCard({
+          year,
+          monthName,
+          data: response.data,
+        });
+      } catch (error) {
+        console.error(
+          "Failed to fetch portfolio state holdings for month:",
+          error,
+        );
+      }
+    },
+    [],
+  );
+
   // Safely extract years/months matrix for performance calculations
   const matrixData = useMemo(() => {
     if (!rawApiData) return [];
@@ -144,25 +170,6 @@ export const Performance: React.FC = () => {
       return rawApiData.matrix;
     return [];
   }, [rawApiData]);
-
-  // Handler to extract month data locally from the matrix without failing network requests
-  const handleMonthClick = useCallback(
-    async (year: number, monthNumber: number, monthName: string) => {
-      const yearRow = matrixData.find(
-        (row: any) => Number(row.year) === Number(year),
-      );
-      const monthKey = String(monthNumber).padStart(2, "0");
-      const monthDataFromMatrix = yearRow?.months?.[monthKey] || {};
-
-      setSelectedMonthCard({
-        year,
-        monthNumber,
-        monthName,
-        data: monthDataFromMatrix,
-      });
-    },
-    [matrixData],
-  );
 
   // Compute performance metrics for the summary dashboard
   const performanceMetrics = useMemo(() => {
@@ -345,13 +352,11 @@ export const Performance: React.FC = () => {
         </div>
       )}
 
-      {/* Render the Portfolio Breakdown Modal Card without unauthorized props */}
       {selectedMonthCard && (
         <PerformanceCard
           year={selectedMonthCard.year}
           monthName={selectedMonthCard.monthName}
           data={selectedMonthCard.data}
-          showDaily={true}
           onClose={() => setSelectedMonthCard(null)}
         />
       )}

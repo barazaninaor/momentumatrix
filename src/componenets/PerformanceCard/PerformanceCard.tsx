@@ -33,7 +33,7 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
   year,
   monthName,
   data,
-  showDaily = false, // ברירת מחדל היא לא להציג (כלומר בבקטסטינג זה יישאר נקי)
+  showDaily = false,
   onClose,
 }) => {
   // Listen for Escape key to close the modal
@@ -49,23 +49,31 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     };
   }, [onClose]);
 
-  // Safely extract stocks/holdings array regardless of API response structure
+  // Safely extract stocks/holdings array from all possible API response formats
   const rawStocksList =
+    (Array.isArray(data) ? data : null) ||
     data?.stocks ||
     data?.holdings ||
     data?.positions ||
-    (Array.isArray(data) ? data : []);
+    data?.symbols ||
+    data?.items ||
+    (data && typeof data === "object"
+      ? Object.values(data).find((val) => Array.isArray(val))
+      : []) ||
+    [];
+
   const sortedStocks = [...rawStocksList].sort(
     (a: any, b: any) =>
-      (b.return || b.Return || 0) - (a.return || a.Return || 0),
+      (b.return || b.Return || b.pnl_percent || 0) -
+      (a.return || a.Return || a.pnl_percent || 0),
   );
 
-  // Force equal weight distribution for each stock (e.g. 10% each if there are 10 stocks)
+  // Force equal weight distribution for each stock
   const equalWeight = rawStocksList.length > 0 ? 100 / rawStocksList.length : 0;
 
   const sectorAllocation: { [key: string]: number } = {};
   rawStocksList.forEach((stock: any) => {
-    const rawSector = stock.sector || stock.Sector || "Other";
+    const rawSector = stock.sector || stock.Sector || stock.industry || "Other";
     const sector = getShortSector(rawSector);
     sectorAllocation[sector] = (sectorAllocation[sector] || 0) + equalWeight;
   });
@@ -97,7 +105,9 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     .join(", ");
 
   const totalReturn =
-    data?.return !== undefined ? data.return : data?.total_return || 0;
+    data?.return !== undefined
+      ? data.return
+      : data?.total_return || data?.pnl_percent || 0;
 
   // Extract daily data if passed
   const dailyData = data?.dailyData || data?.daily_data;
@@ -115,7 +125,6 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
         </div>
 
         <div className="modal-body custom-scrollbar">
-          {/* Renders Daily Performance ONLY if showDaily is true AND dailyData exists */}
           {showDaily && dailyData && dailyData.length > 0 && (
             <div
               style={{
@@ -135,28 +144,52 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
           </div>
 
           <div className="stocks-list">
-            {sortedStocks.map((stock: any, i: number) => {
-              const rawSector = stock.sector || stock.Sector || "Other";
-              const sectorName = getShortSector(rawSector);
-              const stockReturn =
-                stock.return !== undefined ? stock.return : stock.Return || 0;
-              return (
-                <div key={i} className="stock-row">
-                  <span className="col-ticker stock-ticker">
-                    {stock.ticker || stock.Symbol}
-                  </span>
-                  <span className="col-sector" title={rawSector}>
-                    {sectorName}
-                  </span>
-                  <span
-                    className={`col-return ${stockReturn >= 0 ? "positive" : "negative"}`}
-                  >
-                    {stockReturn > 0 ? "+" : ""}
-                    {stockReturn.toFixed(2)}%
-                  </span>
-                </div>
-              );
-            })}
+            {sortedStocks.length > 0 ? (
+              sortedStocks.map((stock: any, i: number) => {
+                const rawSector =
+                  stock.sector || stock.Sector || stock.industry || "Other";
+                const sectorName = getShortSector(rawSector);
+                const stockReturn =
+                  stock.return !== undefined
+                    ? stock.return
+                    : stock.Return !== undefined
+                      ? stock.Return
+                      : stock.pnl_percent || 0;
+                const tickerName =
+                  stock.ticker ||
+                  stock.Symbol ||
+                  stock.symbol ||
+                  stock.name ||
+                  "Unknown";
+
+                return (
+                  <div key={i} className="stock-row">
+                    <span className="col-ticker stock-ticker">
+                      {tickerName}
+                    </span>
+                    <span className="col-sector" title={rawSector}>
+                      {sectorName}
+                    </span>
+                    <span
+                      className={`col-return ${stockReturn >= 0 ? "positive" : "negative"}`}
+                    >
+                      {stockReturn > 0 ? "+" : ""}
+                      {Number(stockReturn).toFixed(2)}%
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "20px",
+                  color: "#8a8aab",
+                }}
+              >
+                No stock data available for this month.
+              </div>
+            )}
           </div>
 
           {chartData.length > 0 && (
@@ -269,7 +302,7 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
             <span>Total Portfolio Return:</span>
             <span className={totalReturn >= 0 ? "positive" : "negative"}>
               {totalReturn > 0 ? "+" : ""}
-              {totalReturn.toFixed(2)}%
+              {Number(totalReturn).toFixed(2)}%
             </span>
           </div>
 
