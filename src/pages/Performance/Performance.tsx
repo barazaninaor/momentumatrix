@@ -136,7 +136,7 @@ export const Performance: React.FC = () => {
     }));
   }, []);
 
-  // Safely extract years/months matrix for performance calculations (מוצהר לפני handleMonthClick)
+  // Safely extract years/months matrix for performance calculations
   const matrixData = useMemo(() => {
     if (!rawApiData) return [];
     if (Array.isArray(rawApiData)) return rawApiData;
@@ -145,14 +145,18 @@ export const Performance: React.FC = () => {
     return [];
   }, [rawApiData]);
 
-  // Handler to extract month data locally from the matrix without failing network requests
+  // Handler to extract month data locally from the matrix with robust property fallback
   const handleMonthClick = useCallback(
     async (year: number, monthNumber: number, monthName: string) => {
       const yearRow = matrixData.find(
         (row: any) => Number(row.year) === Number(year),
       );
       const monthKey = String(monthNumber).padStart(2, "0");
-      const monthDataFromMatrix = yearRow?.months?.[monthKey] || {};
+      const rawMonth = yearRow?.months?.[monthKey] || {};
+
+      // If rawMonth is a primitive or empty, normalize it securely
+      const monthDataFromMatrix =
+        typeof rawMonth === "object" && rawMonth !== null ? rawMonth : {};
 
       setSelectedMonthCard({
         year,
