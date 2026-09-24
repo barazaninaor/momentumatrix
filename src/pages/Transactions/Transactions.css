@@ -1,0 +1,227 @@
+.transactions-page {
+  color: #ffffff;
+  min-height: 80vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.transactions-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: visible;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #111827;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 14px 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* רוחב עמודות מדויק לפי הסדר החדש (8 עמודות) */
+.transactions-table th.index-col, .transactions-table td:nth-child(1) { width: 60px; }
+.transactions-table th:nth-child(2), .transactions-table td:nth-child(2) { width: 130px; } /* Date */
+.transactions-table th:nth-child(3), .transactions-table td:nth-child(3) { width: 110px; } /* Operation */
+.transactions-table th:nth-child(4), .transactions-table td:nth-child(4) { width: 100px; } /* Ticker */
+.transactions-table th:nth-child(5), .transactions-table td:nth-child(5) { width: 180px; } /* Company */
+.transactions-table th:nth-child(6), .transactions-table td:nth-child(6) { width: 120px; } /* Shares */
+.transactions-table th:nth-child(7), .transactions-table td:nth-child(7) { width: 130px; } /* Price */
+.transactions-table th:nth-child(8), .transactions-table td:nth-child(8) { width: 140px; } /* Total */
+
+.transactions-table th:last-child,
+.transactions-table td:last-child {
+  border-right: none;
+}
+
+.transactions-table th {
+  background-color: #1f293d;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.transactions-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.transactions-table tr:last-child {
+  border-bottom: none;
+}
+
+.transactions-table tr:hover {
+  background-color: #1e293b;
+}
+
+.index-cell {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.date-cell {
+  color: #94a3b8;
+}
+
+.ticker-cell {
+  font-weight: 700;
+  color: #f3f4f6;
+  letter-spacing: 0.03em;
+}
+
+.company-cell {
+  color: #ffffff; /* שונה ללבן בולט */
+  font-size: 13px;
+  text-align: left !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* תגית מעוצבת שאינה משנה את גובה השורה */
+.badge {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+.badge-buy {
+  background-color: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.badge-sell {
+  background-color: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111827;
+  padding: 16px 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-btn {
+  background-color: #1f293d;
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-current {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.loading-state, .error-state, .empty-state {
+  padding: 50px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  background-color: #111827;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.error-state {
+  color: #f87171;
+}
+
+/* Mobile responsive adjustments */
+@media screen and (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 16px;
+  }
+
+  .transactions-table {
+    min-width: 980px;
+  }
+
+  .transactions-table th,
+  .transactions-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* נעילת העמודה הראשונה (#) בזמן גלילה אופקית במובייל */
+  .transactions-table th:first-child,
+  .transactions-table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #111827;
+    z-index: 2;
+    border-right: 2px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .transactions-table th:first-child {
+    background-color: #1f293d;
+  }
+}

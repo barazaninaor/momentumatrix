@@ -1,0 +1,87 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.modal-title {
+  color: #ff4d4d;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.modal-text {
+  color: #ccc;
+  font-size: 15px;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.modal-email {
+  display: block;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+.modal-email:hover {
+  text-decoration: underline;
+}
+
+.modal-button-wrapper {
+  display: inline-block;
+}
+
+/* Mobile responsive adjustments restricted strictly to screens up to 768px */
+@media screen and (max-width: 768px) {
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal-content {
+    padding: 20px 16px !important;
+    max-width: 320px !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+  }
+
+  .modal-title {
+    font-size: 18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .modal-text {
+    font-size: 13px !important;
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+  }
+
+  .modal-email {
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
+    word-break: break-all;
+  }
+}

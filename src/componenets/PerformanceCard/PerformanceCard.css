@@ -1,0 +1,251 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #1e1e2f;
+  border: 1px solid #2a2a40;
+  border-radius: 8px;
+  width: 580px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid #2a2a40;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #8a8aab;
+}
+
+/* Main scrollable area of the modal */
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a40 transparent;
+}
+
+/* Balanced full centering for the 3 columns inside the modal */
+.stocks-table-header,
+.stock-row {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 16px; /* Controlled spacing that perfectly centers the compact table */
+  width: 100%;
+}
+
+.stocks-table-header {
+  font-weight: 600;
+  color: #8a8aab;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2a40;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.stocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stock-row {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13px;
+  color: #c5c5d2;
+}
+
+.stock-row:last-child {
+  border-bottom: none;
+}
+
+/* Precise width definitions (narrower sector column and balanced spacing) */
+.col-ticker { 
+  width: 85px; 
+  flex-shrink: 0; 
+  text-align: left; 
+}
+
+.col-sector { 
+  width: 75px; /* Compact sector column */
+  flex-shrink: 0; 
+  text-align: left; 
+  color: #c5c5d2; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.col-return { 
+  width: 85px; 
+  flex-shrink: 0; 
+  text-align: right; 
+  font-weight: 600; 
+}
+
+.stock-ticker { 
+  font-weight: 600; 
+  color: #fff; 
+}
+
+/* Unified and clean custom scrollbar styling */
+.modal-body::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.modal-body::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-body::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #2a2a40;
+  border-radius: 4px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #3b3b58;
+}
+
+.custom-scrollbar {
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a40 transparent;
+}
+
+.modal-total-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a40;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.positive { color: #10b981; }
+.negative { color: #ef4444; }
+
+/* Mobile responsive adjustments: compact modal layout isolating only modal elements */
+@media screen and (max-width: 600px) {
+  .modal-backdrop {
+    padding: 8px;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 320px;
+    max-height: 95vh;
+  }
+
+  .modal-header {
+    padding: 10px 12px;
+  }
+
+  .modal-header h3 {
+    font-size: 15px;
+  }
+
+  .modal-body {
+    padding: 10px 12px;
+    max-height: calc(95vh - 50px);
+  }
+
+  /* Compact typography and spacing inside mobile modal table */
+  .stocks-table-header {
+    font-size: 11px;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+  }
+
+  .stock-row {
+    padding: 3px 0;
+    font-size: 11px;
+  }
+
+  .stocks-list {
+    gap: 2px;
+  }
+
+  .col-ticker { width: 65px; }
+  .col-sector { width: 55px; }
+  .col-return { width: 65px; }
+
+  .stocks-table-header,
+  .stock-row {
+    gap: 8px;
+  }
+
+  .modal-body .section-subtitle {
+    font-size: 13px !important;
+    margin: 8px 0 6px 0 !important;
+  }
+
+  /* Target strictly the sector chart inside the modal, leaving main page charts untouched */
+  .modal-body .sector-chart-section {
+    padding: 8px !important;
+    margin-top: 6px;
+  }
+
+  .modal-body .chart-container svg {
+    width: 90px !important;
+    height: 90px !important;
+  }
+
+  .modal-total-footer {
+    margin-top: 8px;
+    padding-top: 8px;
+    font-size: 12px;
+  }
+
+  .modal-total-footer div, 
+  .modal-total-footer span {
+    font-size: 12px;
+  }
+
+  .modal-body p, 
+  .modal-body small,
+  .modal-body .disclaimer {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+    margin-top: 4px !important;
+  }
+}

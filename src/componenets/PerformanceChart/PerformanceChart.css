@@ -1,0 +1,204 @@
+/* Main section container */
+.sector-chart-section {
+  background-color: #0c0d0e;
+  border: 1px solid #1f2124;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 100%; /* Prevent container from overflowing parent */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box; /* Include padding and border in element's total width */
+  overflow: visible; /* Allow glow effects to render outside bounds */
+}
+
+/* Independent title styling - Responsive and perfectly proportioned */
+.chart-independent-title {
+  color: #f7f8f8 !important;
+  font-size: clamp(20px, 5vw, 42px) !important; /* Scales fluidly and never overflows mobile screens */
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  margin: 16px auto 16px auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  text-align: center !important;
+  letter-spacing: -0.5px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-sizing: border-box;
+  word-break: break-word; /* Prevent long titles from overflowing */
+  padding: 0 10px;
+}
+
+/* Benchmark selection toolbar */
+.chart-benchmark-toolbar {
+  display: flex;
+  flex-direction: column; /* Stack vertically on small screens to prevent overflow */
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: #16181c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #1f2124;
+  width: 100%;
+  max-width: 100%;
+  margin: 10px auto 16px auto;
+  box-sizing: border-box;
+}
+
+/* Main time-range and filters toolbar */
+.chart-toolbar {
+  display: flex;
+  flex-direction: column; /* Stack controls vertically on mobile to avoid horizontal overflow */
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #16181c;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #1f2124;
+  margin: 0 auto 15px auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Time range buttons container */
+.time-range-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.range-btn {
+  background: #212529;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.range-btn.active {
+  background: #3b82f6;
+}
+
+/* Custom date inputs wrapper */
+.custom-date-inputs {
+  display: flex;
+  flex-wrap: wrap; /* Wrap elements if screen is too narrow */
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-left: none; /* Remove left border on mobile stacking */
+  padding-left: 0;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+
+.custom-date-inputs.enabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.custom-date-inputs.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.date-input {
+  background: #212529;
+  color: #fff;
+  border: 1px solid #374151;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color-scheme: dark;
+  width: 110px; /* Fixed standard width for date inputs */
+  max-width: 100%;
+}
+
+.date-separator {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Chart container wrapper */
+.chart-container {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  overflow: visible !important; /* Prevent glow filters from being cut off */
+  padding: 10px 0; /* Add breathing room for the drop-shadow filter */
+}
+
+/* Glow effects for different lines */
+.momentu-matrix-line path {
+  filter: drop-shadow(0 0 2px #ffffff) 
+          drop-shadow(0 0 6px #00f0ff) 
+          drop-shadow(0 0 14px #00aaff);
+}
+
+.spy-line path {
+  filter: drop-shadow(0 0 2px #fff5f5) 
+          drop-shadow(0 0 6px #ff2222) 
+          drop-shadow(0 0 14px #ff0000);
+}
+
+.qqq-line path {
+  filter: drop-shadow(0 0 2px #faf5ff) 
+          drop-shadow(0 0 6px #a855f7) 
+          drop-shadow(0 0 14px #9333ea);
+}
+
+.dia-line path {
+  filter: drop-shadow(0 0 2px #f0fdf4) 
+          drop-shadow(0 0 6px #10b981) 
+          drop-shadow(0 0 14px #059669);
+}
+
+.momentu-matrix-line path,
+.spy-line path,
+.qqq-line path,
+.dia-line path {
+  transition: d 0.3s ease-in-out;
+}
+
+/* Desktop screen adjustments (min-width: 768px) */
+@media screen and (min-width: 768px) {
+  .chart-benchmark-toolbar {
+    flex-direction: row;
+    width: fit-content;
+    padding: 12px 20px;
+  }
+
+  .chart-toolbar {
+    flex-direction: row;
+    width: fit-content;
+    padding: 10px 14px;
+  }
+
+  .custom-date-inputs {
+    border-left: 1px solid #374151;
+    padding-left: 10px;
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
+  .chart-independent-title {
+    font-size: 42px !important;
+  }
+}

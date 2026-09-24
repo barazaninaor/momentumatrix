@@ -1,0 +1,28 @@
+.token-error-msg {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.token-success-msg {
+  color: green;
+  margin-bottom: 15px;
+}
+
+.token-back-container {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.token-back-container .Button {
+  width: 100%;
+}
+
+.token-back-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  text-decoration: underline;
+}

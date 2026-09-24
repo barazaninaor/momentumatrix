@@ -1,0 +1,113 @@
+.daily-performance-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #fff;
+  font-family: inherit;
+}
+
+/* כרטיסיות הסיכום (Daily, MTD, YTD, ITD) */
+.daily-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* טבלת הנתונים היומיים */
+.daily-table-container {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.daily-returns-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.daily-returns-table th {
+  position: sticky;
+  top: 0;
+  background: #1e1b2e; /* תואם לרקע הכהה של המודל */
+  color: #9ca3af;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 1;
+}
+
+.daily-returns-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #e5e7eb;
+}
+
+.daily-returns-table tr:last-child td {
+  border-bottom: none;
+}
+
+.daily-returns-table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* צבעים לחיובי/שלילי */
+.positive {
+  color: #10b981 !important;
+}
+
+.negative {
+  color: #ef4444 !important;
+}
+
+.daily-empty-state {
+  padding: 30px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* עיצוב פס גלילה דק ויפה למודל */
+.daily-table-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.daily-table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.daily-table-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.daily-table-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
