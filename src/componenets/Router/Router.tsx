@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { ScrollToTop } from "../ScrollToTop/ScrollToTop";
 import { NavBar } from "../NavBar/NavBar";
 import { arrForNav } from "../../types/NavBarInfo";
@@ -11,11 +17,10 @@ import { Performance } from "../../pages/Performance/Performance";
 import { Portfolio } from "../../pages/Portfolio/Portfolio";
 import { Transactions } from "../../pages/Transactions/Transactions";
 import { Login } from "../../pages/Login/Login";
-import { GenerateToken } from "../../pages/GenerateToken/GenerateToken"; 
+import { GenerateToken } from "../../pages/GenerateToken/GenerateToken";
 import { TokenLogin } from "../../pages/TokenLogin/TokenLogin";
 import { Footer } from "../Footer/Footer";
 import { Modal } from "../Modal/Modal";
-
 
 /**
  * Handles redirection for GitHub Pages SPA fallback.
@@ -61,12 +66,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     navigate(-1);
   };
 
-  return (
-    <Modal 
-      isOpen={showModal} 
-      onClose={handleCloseModal} 
-    />
-  );
+  return <Modal isOpen={showModal} onClose={handleCloseModal} />;
 };
 
 export const Router = () => {
@@ -86,58 +86,58 @@ export const Router = () => {
           <Route path="/about" element={<About />} />
           <Route path="/strategy" element={<Strategy />} />
           <Route path="/login" element={<Login />} />
-          
+
           {/* Public or Token login route */}
           <Route path="/token-login" element={<TokenLogin />} />
 
           {/* Protected routes requiring authentication */}
-          <Route 
-            path="/generate-token" 
+          <Route
+            path="/generate-token"
             element={
               <ProtectedRoute>
                 <GenerateToken />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/backtesting" 
+          <Route
+            path="/backtesting"
             element={
               <ProtectedRoute>
                 <Backtesting />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/performance" 
+          <Route
+            path="/performance"
             element={
               <ProtectedRoute>
                 <Performance />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/portfolio" 
+          <Route
+            path="/portfolio"
             element={
               <ProtectedRoute>
                 <Portfolio />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/transactions" 
+          <Route
+            path="/transactions"
             element={
               <ProtectedRoute>
                 <Transactions />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/change-password" 
+          <Route
+            path="/change-password"
             element={
               <ProtectedRoute>
                 <Login />
               </ProtectedRoute>
-            } 
+            }
           />
         </Routes>
 

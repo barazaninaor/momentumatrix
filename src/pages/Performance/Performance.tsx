@@ -1,381 +1,360 @@
-import React, { useState, useEffect } from "react";
-import "./PerformanceCard.css";
-import { DailyPerformanceTab } from "../../componenets/DailyPerformanceTab/DailyPerformanceTab";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { MainTitle } from "../../componenets/MainTitle/MainTitle";
+import { PerformanceTable } from "../../componenets/PerformanceTable/PerformanceTable";
+import { PerformanceChart } from "../../componenets/PerformanceChart/PerformanceChart";
+import { PerformanceMetricsSummary } from "../../componenets/PerformanceMetricsSummary/PerformanceMetricsSummary";
+import { PerformanceCard } from "../../componenets/PerformanceCard/PerformanceCard";
+import { LoadingSpinner } from "../../componenets/LoadingSpinner/LoadingSpinner";
+import { fetchPerformanceAnalysis } from "../../services/performanceService";
 
-interface PerformanceCardProps {
-  year: number;
-  monthName: string;
-  monthNumber?: string | number; // <-- הוגדר כאן בצורה מסודרת
-  data: any;
-  dailyDataByMonth?: { [key: string]: any[] };
-  onClose: () => void;
-  showDaily?: boolean;
-}
+// Import central API client
+import { api } from "../../services/api";
+import "./Performance.css";
 
-const sectorMapping: { [key: string]: string } = {
-  "Information Technology": "Tech",
-  "Health Care": "Health",
-  Financials: "Finance",
-  "Consumer Discretionary": "Cons. Disc",
-  "Consumer Staples": "Staples",
-  "Communication Services": "Comm",
-  Industrials: "Industrial",
-  Energy: "Energy",
-  Utilities: "Utilities",
-  "Real Estate": "Real Estate",
-  Materials: "Materials",
-};
+export const Performance: React.FC = () => {
+  // Initialize with an empty array so no benchmark is selected by default
+  const [selectedBenchmarks, setSelectedBenchmarks] = useState<string[]>([]);
 
-const getShortSector = (rawSector?: string): string => {
-  if (!rawSector) return "Other";
-  return sectorMapping[rawSector] || rawSector;
-};
+  // State for storing the full API data shared between the table and the chart
+  const [rawApiData, setRawApiData] = useState<any>(null);
 
-export const PerformanceCard: React.FC<PerformanceCardProps> = ({
-  year,
-  monthName,
-  monthNumber = 1,
-  data,
-  dailyDataByMonth,
-  onClose,
-  showDaily = false,
-}) => {
-  const [activeTab, setActiveTab] = useState<"holdings" | "daily">("holdings");
+  // State for storing combined chart data (Portfolio history + Benchmarks)
+  const [combinedChartData, setCombinedChartData] = useState<any[]>([]);
 
+  // Loading state
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // State for managing the active month breakdown card modal
+  const [selectedMonthCard, setSelectedMonthCard] = useState<{
+    year: number;
+    monthNumber: number | string;
+    monthName: string;
+    data: any;
+  } | null>(null);
+
+  // Fetch account history and benchmark prices, then merge them by date for the chart
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
+    const fetchChartData = async () => {
+      try {
+        setIsLoading(true);
+        // Fetch account history and benchmarks in parallel using the central api client
+        const [historyRes, benchmarksRes] = await Promise.all([
+          api.get("/account-history/"),
+          api.get("/benchmark/"),
+        ]);
+
+        const historyRecords = historyRes.data || [];
+        const benchmarkRecords = benchmarksRes.data || [];
+
+        if (historyRecords.length > 0) {
+          // Sort portfolio history chronologically (oldest to newest)
+          const sortedHistory = [...historyRecords].sort(
+            (a: any, b: any) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime(),
+          );
+
+          const initialPortfolioVal = sortedHistory[0].net_liquidation;
+
+          // Group benchmarks by ticker and date for easy lookup
+          const benchmarkMap: {
+            [dateStr: string]: { [ticker: string]: number };
+          } = {};
+
+          // Sort benchmarks chronologically as well
+          const sortedBenchmarks = [...benchmarkRecords].sort(
+            (a: any, b: any) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime(),
+          );
+
+          // Find starting prices for benchmarks
+          const initialPrices: { [ticker: string]: number } = {};
+          sortedBenchmarks.forEach((b: any) => {
+            const t = b.ticker.toUpperCase();
+            if (!initialPrices[t]) {
+              initialPrices[t] = b.close_price;
+            }
+          });
+
+          sortedBenchmarks.forEach((b: any) => {
+            const dateStr = b.date;
+            const t = b.ticker.toUpperCase();
+            if (!benchmarkMap[dateStr]) {
+              benchmarkMap[dateStr] = {};
+            }
+            // Calculate percentage return from baseline
+            const basePrice = initialPrices[t];
+            const pctReturn = basePrice
+              ? ((b.close_price - basePrice) / basePrice) * 100
+              : 0;
+            benchmarkMap[dateStr][t] = pctReturn;
+          });
+
+          // Merge portfolio history with benchmark returns
+          let latestBenchmarksValues: { [ticker: string]: number } = {};
+          const mergedData = sortedHistory.map((item: any) => {
+            const dateStr = item.date;
+            const currentPortfolioVal = item.net_liquidation;
+            const portfolioReturn =
+              initialPortfolioVal > 0
+                ? ((currentPortfolioVal - initialPortfolioVal) /
+                    initialPortfolioVal) *
+                  100
+                : 0;
+
+            if (benchmarkMap[dateStr]) {
+              latestBenchmarksValues = {
+                ...latestBenchmarksValues,
+                ...benchmarkMap[dateStr],
+              };
+            }
+
+            return {
+              dateStr: dateStr,
+              date: dateStr,
+              MomentuMatrix: portfolioReturn,
+              ...latestBenchmarksValues,
+            };
+          });
+
+          setCombinedChartData(mergedData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch chart history or benchmarks:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
 
-  // חילוץ בטוח ומקיף של רשימת המניות מכל מבנה אפשרי
-  const rawStocksList = Array.isArray(data)
-    ? data
-    : Array.isArray(data?.stocks)
-      ? data.stocks
-      : Array.isArray(data?.holdings)
-        ? data.holdings
-        : Array.isArray(data?.positions)
-          ? data.positions
-          : Array.isArray(data?.items)
-            ? data.items
-            : Array.isArray(data?.data)
-              ? data.data
-              : [];
+    fetchChartData();
+  }, []);
 
-  const sortedStocks = [...rawStocksList].sort(
-    (a: any, b: any) =>
-      (b.return || b.Return || b.returns || 0) -
-      (a.return || a.Return || a.returns || 0),
+  // Memoized callback to update the data received from the table/service
+  const handleDataLoaded = useCallback((data: any) => {
+    setRawApiData((prev: any) => ({
+      ...prev,
+      ...(typeof data === "object" && data !== null ? data : { matrix: data }),
+    }));
+  }, []);
+
+  // Safely extract years/months matrix for performance calculations
+  const matrixData = useMemo(() => {
+    if (!rawApiData) return [];
+    if (Array.isArray(rawApiData)) return rawApiData;
+    if (rawApiData.matrix && Array.isArray(rawApiData.matrix))
+      return rawApiData.matrix;
+    return [];
+  }, [rawApiData]);
+
+  // Handler to extract month data locally from the matrix without failing network requests
+  const handleMonthClick = useCallback(
+    async (year: number, monthNumber: number, monthName: string) => {
+      const yearRow = matrixData.find(
+        (row: any) => Number(row.year) === Number(year),
+      );
+      const monthKey = String(monthNumber).padStart(2, "0");
+      const monthDataFromMatrix = yearRow?.months?.[monthKey] || {};
+
+      setSelectedMonthCard({
+        year,
+        monthNumber,
+        monthName,
+        data: monthDataFromMatrix,
+      });
+    },
+    [matrixData],
   );
 
-  const equalWeight = rawStocksList.length > 0 ? 100 / rawStocksList.length : 0;
+  // Compute performance metrics for the summary dashboard
+  const performanceMetrics = useMemo(() => {
+    if (!matrixData || matrixData.length === 0) {
+      return {
+        backtestPeriodStart: "N/A",
+        backtestPeriodEnd: "N/A",
+        sharpeRatio: "0.00",
+        stdDev: "0.00%",
+        beta: "1.00",
+        positiveMonthsPct: "0.0%",
+        bestMonth: { val: 0, date: "N/A" },
+        worstMonth: { val: 0, date: "N/A" },
+        bestYear: { val: 0, year: "N/A" },
+        worstYear: { val: 0, year: "N/A" },
+        cumulativeReturn: 0,
+      };
+    }
 
-  const sectorAllocation: { [key: string]: number } = {};
-  rawStocksList.forEach((stock: any) => {
-    const rawSector = stock.sector || stock.Sector || "Other";
-    const sector = getShortSector(rawSector);
-    sectorAllocation[sector] = (sectorAllocation[sector] || 0) + equalWeight;
-  });
+    let allMonths: { date: string; return: number }[] = [];
+    let yearlyReturns: { year: number; return: number }[] = [];
+    let cumulativeProduct = 1.0;
 
-  const chartData = Object.entries(sectorAllocation)
-    .map(([name, value]) => ({
-      name,
-      value,
-    }))
-    .sort((a, b) => b.value - a.value);
+    const sortedRows = [...matrixData].sort(
+      (a: any, b: any) => Number(b.year) - Number(a.year),
+    );
 
-  const COLORS = [
-    "#3b82f6",
-    "#10b981",
-    "#f59e0b",
-    "#8b5cf6",
-    "#ec4899",
-    "#06b6d4",
-    "#64748b",
-  ];
+    sortedRows.forEach((row: any) => {
+      if (row.year && row.months) {
+        if (row.total !== null && row.total !== undefined) {
+          yearlyReturns.push({ year: row.year, return: row.total });
+        }
 
-  let cumulativePercent = 0;
-  const gradientStops = chartData
-    .map((entry, idx) => {
-      const start = cumulativePercent;
-      cumulativePercent += entry.value;
-      return `${COLORS[idx % COLORS.length]} ${start}% ${cumulativePercent}%`;
-    })
-    .join(", ");
+        const monthKeys = Object.keys(row.months).sort();
+        monthKeys.forEach((mKey) => {
+          const mData = row.months[mKey];
+          if (mData && typeof mData.return === "number") {
+            const ret = mData.return;
+            allMonths.push({ date: `${row.year}-${mKey}`, return: ret });
+            cumulativeProduct *= 1.0 + ret / 100.0;
+          }
+        });
+      }
+    });
 
-  const totalReturn =
-    data?.return !== undefined
-      ? data.return
-      : data?.total_return !== undefined
-        ? data.total_return
-        : 0;
+    const cumulativeReturn = (cumulativeProduct - 1.0) * 100.0;
 
-  const formattedMonthNum = String(monthNumber).padStart(2, "0");
-  const monthKey = `${year}-${formattedMonthNum}`;
+    let startDate = "N/A";
+    let endDate = "N/A";
+    if (allMonths.length > 0) {
+      startDate = allMonths[0].date;
+      endDate = allMonths[allMonths.length - 1].date;
+    }
 
-  const dailyData =
-    data?.daily ||
-    (dailyDataByMonth && dailyDataByMonth[monthKey]) ||
-    data?.daily_returns ||
-    data?.dailyPerformance ||
-    [];
+    const positiveCount = allMonths.filter((m) => m.return > 0).length;
+    const positiveMonthsPct =
+      allMonths.length > 0 ? (positiveCount / allMonths.length) * 100 : 0;
+
+    let bestM = { val: -Infinity, date: "N/A" };
+    let worstM = { val: Infinity, date: "N/A" };
+    allMonths.forEach((m) => {
+      if (m.return > bestM.val) bestM = { val: m.return, date: m.date };
+      if (m.return < worstM.val) worstM = { val: m.return, date: m.date };
+    });
+
+    let bestY = { val: -Infinity, year: "N/A" };
+    let worstY = { val: Infinity, year: "N/A" };
+    yearlyReturns.forEach((y) => {
+      if (y.return > bestY.val) bestY = { val: y.return, year: String(y.year) };
+      if (y.return < worstY.val)
+        worstY = { val: y.return, year: String(y.year) };
+    });
+
+    let stdDevAnnual = 0;
+    let sharpe = 0;
+    if (allMonths.length > 1) {
+      const meanMonthly =
+        allMonths.reduce((acc, m) => acc + m.return, 0) / allMonths.length;
+      const variance =
+        allMonths.reduce(
+          (acc, m) => acc + Math.pow(m.return - meanMonthly, 2),
+          0,
+        ) /
+        (allMonths.length - 1);
+      const stdDevMonthly = Math.sqrt(variance);
+      stdDevAnnual = stdDevMonthly * Math.sqrt(12);
+
+      const meanAnnual = meanMonthly * 12;
+      sharpe = stdDevAnnual > 0 ? meanAnnual / stdDevAnnual : 0;
+    }
+
+    const serverBeta = rawApiData?.metrics?.beta || "1.02";
+
+    return {
+      backtestPeriodStart: startDate,
+      backtestPeriodEnd: endDate,
+      sharpeRatio: sharpe.toFixed(2),
+      stdDev: `${stdDevAnnual.toFixed(2)}%`,
+      beta: serverBeta,
+      positiveMonthsPct: `${positiveMonthsPct.toFixed(1)}%`,
+      bestMonth: { val: bestM.val, date: bestM.date },
+      worstMonth: { val: worstM.val, date: worstM.date },
+      bestYear: { val: bestY.val, year: bestY.year },
+      worstYear: { val: worstY.val, year: worstY.year },
+      cumulativeReturn,
+    };
+  }, [matrixData, rawApiData]);
+
+  const spyMetrics = useMemo(() => {
+    if (rawApiData && rawApiData.spyMetrics) {
+      return rawApiData.spyMetrics;
+    }
+    return {
+      cumulativeReturn: 0,
+      sharpeRatio: "0.00",
+      stdDev: "0.00%",
+      positiveMonthsPct: "0.0%",
+      bestMonth: { val: 0, date: "N/A" },
+      worstMonth: { val: 0, date: "N/A" },
+      bestYear: { val: 0, year: "N/A" },
+      worstYear: { val: 0, year: "N/A" },
+    };
+  }, [rawApiData]);
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h3>
-            Portfolio Breakdown: {monthName} {year}
-          </h3>
-          <button className="close-btn" onClick={onClose}>
-            ×
-          </button>
-        </div>
+    <div className="performance-page">
+      <MainTitle MainTitle="Performance" />
 
-        {showDaily && (
+      {isLoading && combinedChartData.length === 0 ? (
+        <div
+          style={{ display: "flex", justifyContent: "center", padding: "50px" }}
+        >
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <div
+          className="performance-content-container"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <PerformanceMetricsSummary
+            title="PERFORMANCE PERIOD"
+            performanceMetrics={performanceMetrics}
+            spyMetrics={spyMetrics}
+          />
+
           <div
             style={{
               display: "flex",
-              borderBottom: "1px solid #2a2a40",
-              padding: "0 20px",
-              gap: "20px",
-              backgroundColor: "#181824",
+              flexDirection: "column",
+              gap: "40px",
+              width: "100%",
+              maxWidth: "1300px",
             }}
           >
-            <button
-              onClick={() => setActiveTab("holdings")}
-              style={{
-                background: "none",
-                border: "none",
-                color: activeTab === "holdings" ? "#3b82f6" : "#8a8aab",
-                padding: "12px 0",
-                fontWeight: "600",
-                cursor: "pointer",
-                borderBottom:
-                  activeTab === "holdings"
-                    ? "2px solid #3b82f6"
-                    : "2px solid transparent",
-                fontSize: "13px",
-              }}
-            >
-              Holdings & Sectors
-            </button>
-            <button
-              onClick={() => setActiveTab("daily")}
-              style={{
-                background: "none",
-                border: "none",
-                color: activeTab === "daily" ? "#3b82f6" : "#8a8aab",
-                padding: "12px 0",
-                fontWeight: "600",
-                cursor: "pointer",
-                borderBottom:
-                  activeTab === "daily"
-                    ? "2px solid #3b82f6"
-                    : "2px solid transparent",
-                fontSize: "13px",
-              }}
-            >
-              Daily Performance
-            </button>
-          </div>
-        )}
-
-        <div className="modal-body">
-          {activeTab === "holdings" || !showDaily ? (
-            <>
-              <div className="stocks-table-header">
-                <span className="col-ticker">Ticker</span>
-                <span className="col-sector">Sector</span>
-                <span className="col-return">Return</span>
-              </div>
-
-              <div className="stocks-list">
-                {sortedStocks.length > 0 ? (
-                  sortedStocks.map((stock: any, i: number) => {
-                    const rawSector = stock.sector || stock.Sector || "Other";
-                    const sectorName = getShortSector(rawSector);
-                    const stockReturn =
-                      stock.return !== undefined
-                        ? stock.return
-                        : stock.Return !== undefined
-                          ? stock.Return
-                          : stock.returns || 0;
-                    return (
-                      <div key={i} className="stock-row">
-                        <span className="col-ticker stock-ticker">
-                          {stock.ticker || stock.Symbol || stock.symbol}
-                        </span>
-                        <span className="col-sector" title={rawSector}>
-                          {sectorName}
-                        </span>
-                        <span
-                          className={`col-return ${
-                            stockReturn >= 0 ? "positive" : "negative"
-                          }`}
-                        >
-                          {stockReturn > 0 ? "+" : ""}
-                          {Number(stockReturn).toFixed(2)}%
-                        </span>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "20px",
-                      color: "#8a8aab",
-                    }}
-                  >
-                    No holdings data available for this month.
-                  </div>
-                )}
-              </div>
-
-              {chartData.length > 0 && (
-                <div
-                  style={{
-                    marginTop: "16px",
-                    borderTop: "1px solid #2a2a40",
-                    paddingTop: "12px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      color: "#8a8aab",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    Sector Allocation
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: "16px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "110px",
-                        height: "110px",
-                        borderRadius: "50%",
-                        background: `conic-gradient(${gradientStops})`,
-                        position: "relative",
-                        flexShrink: 0,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-                      }}
-                    >
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "24px",
-                          left: "24px",
-                          right: "24px",
-                          bottom: "24px",
-                          backgroundColor: "#1e1e2f",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    </div>
-
-                    <div
-                      className="custom-scrollbar"
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "5px",
-                        flex: 1,
-                      }}
-                    >
-                      {chartData.map((entry, idx) => (
-                        <div
-                          key={entry.name}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            fontSize: "11px",
-                          }}
-                        >
-                          <span
-                            style={{
-                              width: "8px",
-                              height: "8px",
-                              borderRadius: "50%",
-                              backgroundColor: COLORS[idx % COLORS.length],
-                              flexShrink: 0,
-                            }}
-                          />
-                          <span
-                            style={{
-                              color: "#fff",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                            title={entry.name}
-                          >
-                            {entry.name}
-                          </span>
-                          <span
-                            style={{
-                              color: "#8a8aab",
-                              marginLeft: "auto",
-                              fontWeight: "600",
-                            }}
-                          >
-                            {entry.value.toFixed(1)}%
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="modal-total-footer">
-                <span>Total Portfolio Return:</span>
-                <span className={totalReturn >= 0 ? "positive" : "negative"}>
-                  {totalReturn > 0 ? "+" : ""}
-                  {Number(totalReturn).toFixed(2)}%
-                </span>
-              </div>
-
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "#8a8aab",
-                  textAlign: "center",
-                  marginTop: "8px",
-                  fontStyle: "italic",
-                }}
-              >
-                * Returns are calculated based on stock holdings and ignore
-                portfolio cash.
-              </div>
-            </>
-          ) : (
-            <DailyPerformanceTab
-              dailyData={dailyData}
-              ytdReturn={data?.ytdReturn}
-              itdReturn={data?.itdReturn}
+            <PerformanceTable
+              selectedBenchmarks={selectedBenchmarks}
+              setSelectedBenchmarks={setSelectedBenchmarks}
+              onDataLoaded={handleDataLoaded}
+              fetchDataService={fetchPerformanceAnalysis}
+              onMonthClick={handleMonthClick}
+              showNote={true}
             />
-          )}
+
+            <PerformanceChart
+              data={
+                combinedChartData.length > 0 ? combinedChartData : rawApiData
+              }
+              selectedBenchmarks={selectedBenchmarks}
+              setSelectedBenchmarks={setSelectedBenchmarks}
+              availableRanges={["ITD", "2026", "Custom"]}
+              defaultRange="ITD"
+            />
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Render the Portfolio Breakdown Modal Card without unauthorized props */}
+      {selectedMonthCard && (
+        <PerformanceCard
+          year={selectedMonthCard.year}
+          monthName={selectedMonthCard.monthName}
+          data={selectedMonthCard.data}
+          showDaily={true}
+          onClose={() => setSelectedMonthCard(null)}
+        />
+      )}
     </div>
   );
 };
