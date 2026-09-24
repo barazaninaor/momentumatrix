@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { DailyPerformanceTab } from "./DailyPerformanceTab";
 import "./PerformanceCard.css";
+import { DailyPerformanceTab } from "../DailyPerformanceTab/DailyPerformanceTab";
 
 interface PerformanceCardProps {
   year: number;
   monthName: string;
   data: any;
-  showDaily?: boolean; // <-- פרופ חדש שאומר האם להציג נתונים יומיים
+  showDaily?: boolean;
   onClose: () => void;
 }
 
