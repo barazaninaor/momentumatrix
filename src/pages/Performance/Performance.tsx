@@ -24,12 +24,12 @@ export const Performance: React.FC = () => {
   // Loading state
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // State for managing the active month breakdown card modal (כולל שמירת מספר החודש)
+  // State for managing the active month breakdown card modal (supports optional dailyData)
   const [selectedMonthCard, setSelectedMonthCard] = useState<{
     year: number;
-    monthNumber: number | string;
     monthName: string;
     data: any;
+    dailyData?: any[];
   } | null>(null);
 
   // Fetch account history and benchmark prices, then merge them by date for the chart
@@ -136,6 +136,44 @@ export const Performance: React.FC = () => {
     }));
   }, []);
 
+  // Handler to fetch portfolio state holdings and filter daily data when a month is clicked
+  const handleMonthClick = useCallback(
+    async (year: number, monthNumber: number, monthName: string) => {
+      try {
+        console.log(
+          `Fetching portfolio state for ${year}/${monthNumber} (${monthName})`,
+        );
+
+        // Filter daily data matching the selected year and month
+        const filteredDailyData = combinedChartData.filter((item: any) => {
+          const itemDate = new Date(item.date);
+          return (
+            itemDate.getFullYear() === year &&
+            itemDate.getMonth() + 1 === monthNumber
+          );
+        });
+
+        const portfolioId = 1;
+        const response = await api.get(
+          `/transactions/portfolio-state/${portfolioId}/${year}/${monthNumber}`,
+        );
+
+        setSelectedMonthCard({
+          year,
+          monthName,
+          data: response.data,
+          dailyData: filteredDailyData, // Pass filtered daily data to the card modal
+        });
+      } catch (error) {
+        console.error(
+          "Failed to fetch portfolio state holdings for month:",
+          error,
+        );
+      }
+    },
+    [combinedChartData],
+  );
+
   // Safely extract years/months matrix for performance calculations
   const matrixData = useMemo(() => {
     if (!rawApiData) return [];
@@ -144,29 +182,6 @@ export const Performance: React.FC = () => {
       return rawApiData.matrix;
     return [];
   }, [rawApiData]);
-
-  // Handler to extract month data locally from the matrix with robust property fallback
-  const handleMonthClick = useCallback(
-    async (year: number, monthNumber: number, monthName: string) => {
-      const yearRow = matrixData.find(
-        (row: any) => Number(row.year) === Number(year),
-      );
-      const monthKey = String(monthNumber).padStart(2, "0");
-      const rawMonth = yearRow?.months?.[monthKey] || {};
-
-      // If rawMonth is a primitive or empty, normalize it securely
-      const monthDataFromMatrix =
-        typeof rawMonth === "object" && rawMonth !== null ? rawMonth : {};
-
-      setSelectedMonthCard({
-        year,
-        monthNumber,
-        monthName,
-        data: monthDataFromMatrix,
-      });
-    },
-    [matrixData],
-  );
 
   // Compute performance metrics for the summary dashboard
   const performanceMetrics = useMemo(() => {
@@ -190,6 +205,7 @@ export const Performance: React.FC = () => {
     let yearlyReturns: { year: number; return: number }[] = [];
     let cumulativeProduct = 1.0;
 
+    // Sort rows in descending order (newest year first) so the current/newest year appears at the top
     const sortedRows = [...matrixData].sort(
       (a: any, b: any) => Number(b.year) - Number(a.year),
     );
@@ -275,6 +291,7 @@ export const Performance: React.FC = () => {
     };
   }, [matrixData, rawApiData]);
 
+  // Extract SPY metrics if available from backend response
   const spyMetrics = useMemo(() => {
     if (rawApiData && rawApiData.spyMetrics) {
       return rawApiData.spyMetrics;
@@ -312,6 +329,7 @@ export const Performance: React.FC = () => {
             alignItems: "center",
           }}
         >
+          {/* Performance Metrics Summary Dashboard right below the main title */}
           <PerformanceMetricsSummary
             title="PERFORMANCE PERIOD"
             performanceMetrics={performanceMetrics}
@@ -327,6 +345,7 @@ export const Performance: React.FC = () => {
               maxWidth: "1300px",
             }}
           >
+            {/* Performance Table section */}
             <PerformanceTable
               selectedBenchmarks={selectedBenchmarks}
               setSelectedBenchmarks={setSelectedBenchmarks}
@@ -336,6 +355,7 @@ export const Performance: React.FC = () => {
               showNote={true}
             />
 
+            {/* Performance Chart rendering the combined portfolio and benchmark timeline */}
             <PerformanceChart
               data={
                 combinedChartData.length > 0 ? combinedChartData : rawApiData
@@ -349,15 +369,13 @@ export const Performance: React.FC = () => {
         </div>
       )}
 
-      {/* Render the Portfolio Breakdown Modal Card with daily support */}
+      {/* Render the Portfolio Breakdown Modal Card if a month is selected */}
       {selectedMonthCard && (
         <PerformanceCard
           year={selectedMonthCard.year}
           monthName={selectedMonthCard.monthName}
-          monthNumber={selectedMonthCard.monthNumber}
           data={selectedMonthCard.data}
-          dailyDataByMonth={rawApiData?.dailyDataByMonth}
-          showDaily={true}
+          dailyData={selectedMonthCard.dailyData}
           onClose={() => setSelectedMonthCard(null)}
         />
       )}

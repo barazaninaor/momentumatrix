@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { DailyPerformanceTab } from "./DailyPerformanceTab";
 import "./PerformanceCard.css";
-import { DailyPerformanceTab } from "../DailyPerformanceTab/DailyPerformanceTab";
 
 interface PerformanceCardProps {
   year: number;
   monthName: string;
-  monthNumber?: string | number;
   data: any;
-  dailyDataByMonth?: { [key: string]: any[] };
+  showDaily?: boolean; // <-- פרופ חדש שאומר האם להציג נתונים יומיים
   onClose: () => void;
-  showDaily?: boolean;
 }
 
 const sectorMapping: { [key: string]: string } = {
@@ -34,14 +32,11 @@ const getShortSector = (rawSector?: string): string => {
 export const PerformanceCard: React.FC<PerformanceCardProps> = ({
   year,
   monthName,
-  monthNumber = 1,
   data,
-  dailyDataByMonth,
+  showDaily = false, // ברירת מחדל היא לא להציג (כלומר בבקטסטינג זה יישאר נקי)
   onClose,
-  showDaily = false,
 }) => {
-  const [activeTab, setActiveTab] = useState<"holdings" | "daily">("holdings");
-
+  // Listen for Escape key to close the modal
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -54,22 +49,18 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     };
   }, [onClose]);
 
-  // חילוץ בטוח ומקיף של רשימת המניות מכל מבנה אפשרי
-  const rawStocksList = Array.isArray(data)
-    ? data
-    : data?.stocks ||
-      data?.holdings ||
-      data?.positions ||
-      data?.items ||
-      data?.data ||
-      [];
-
+  // Safely extract stocks/holdings array regardless of API response structure
+  const rawStocksList =
+    data?.stocks ||
+    data?.holdings ||
+    data?.positions ||
+    (Array.isArray(data) ? data : []);
   const sortedStocks = [...rawStocksList].sort(
     (a: any, b: any) =>
-      (b.return || b.Return || b.returns || 0) -
-      (a.return || a.Return || a.returns || 0),
+      (b.return || b.Return || 0) - (a.return || a.Return || 0),
   );
 
+  // Force equal weight distribution for each stock (e.g. 10% each if there are 10 stocks)
   const equalWeight = rawStocksList.length > 0 ? 100 / rawStocksList.length : 0;
 
   const sectorAllocation: { [key: string]: number } = {};
@@ -106,21 +97,10 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     .join(", ");
 
   const totalReturn =
-    data?.return !== undefined
-      ? data.return
-      : data?.total_return !== undefined
-        ? data.total_return
-        : 0;
+    data?.return !== undefined ? data.return : data?.total_return || 0;
 
-  const formattedMonthNum = String(monthNumber).padStart(2, "0");
-  const monthKey = `${year}-${formattedMonthNum}`;
-
-  const dailyData =
-    data?.daily ||
-    (dailyDataByMonth && dailyDataByMonth[monthKey]) ||
-    data?.daily_returns ||
-    data?.dailyPerformance ||
-    [];
+  // Extract daily data if passed
+  const dailyData = data?.dailyData || data?.daily_data;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -134,241 +114,199 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
           </button>
         </div>
 
-        {showDaily && (
-          <div
-            style={{
-              display: "flex",
-              borderBottom: "1px solid #2a2a40",
-              padding: "0 20px",
-              gap: "20px",
-              backgroundColor: "#181824",
-            }}
-          >
-            <button
-              onClick={() => setActiveTab("holdings")}
+        <div className="modal-body custom-scrollbar">
+          {/* Renders Daily Performance ONLY if showDaily is true AND dailyData exists */}
+          {showDaily && dailyData && dailyData.length > 0 && (
+            <div
               style={{
-                background: "none",
-                border: "none",
-                color: activeTab === "holdings" ? "#3b82f6" : "#8a8aab",
-                padding: "12px 0",
-                fontWeight: "600",
-                cursor: "pointer",
-                borderBottom:
-                  activeTab === "holdings"
-                    ? "2px solid #3b82f6"
-                    : "2px solid transparent",
-                fontSize: "13px",
+                marginBottom: "16px",
+                borderBottom: "1px solid #2a2a40",
+                paddingBottom: "16px",
               }}
             >
-              Holdings & Sectors
-            </button>
-            <button
-              onClick={() => setActiveTab("daily")}
-              style={{
-                background: "none",
-                border: "none",
-                color: activeTab === "daily" ? "#3b82f6" : "#8a8aab",
-                padding: "12px 0",
-                fontWeight: "600",
-                cursor: "pointer",
-                borderBottom:
-                  activeTab === "daily"
-                    ? "2px solid #3b82f6"
-                    : "2px solid transparent",
-                fontSize: "13px",
-              }}
-            >
-              Daily Performance
-            </button>
+              <DailyPerformanceTab dailyData={dailyData} />
+            </div>
+          )}
+
+          <div className="stocks-table-header">
+            <span className="col-ticker">Ticker</span>
+            <span className="col-sector">Sector</span>
+            <span className="col-return">Return</span>
           </div>
-        )}
 
-        <div className="modal-body">
-          {activeTab === "holdings" || !showDaily ? (
-            <>
-              <div className="stocks-table-header">
-                <span className="col-ticker">Ticker</span>
-                <span className="col-sector">Sector</span>
-                <span className="col-return">Return</span>
-              </div>
-
-              <div className="stocks-list">
-                {sortedStocks.length > 0 ? (
-                  sortedStocks.map((stock: any, i: number) => {
-                    const rawSector = stock.sector || stock.Sector || "Other";
-                    const sectorName = getShortSector(rawSector);
-                    const stockReturn =
-                      stock.return !== undefined
-                        ? stock.return
-                        : stock.Return !== undefined
-                          ? stock.Return
-                          : stock.returns || 0;
-                    return (
-                      <div key={i} className="stock-row">
-                        <span className="col-ticker stock-ticker">
-                          {stock.ticker || stock.Symbol || stock.symbol}
-                        </span>
-                        <span className="col-sector" title={rawSector}>
-                          {sectorName}
-                        </span>
-                        <span
-                          className={`col-return ${
-                            stockReturn >= 0 ? "positive" : "negative"
-                          }`}
-                        >
-                          {stockReturn > 0 ? "+" : ""}
-                          {Number(stockReturn).toFixed(2)}%
-                        </span>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "20px",
-                      color: "#8a8aab",
-                    }}
+          <div className="stocks-list">
+            {sortedStocks.map((stock: any, i: number) => {
+              const rawSector = stock.sector || stock.Sector || "Other";
+              const sectorName = getShortSector(rawSector);
+              const stockReturn =
+                stock.return !== undefined ? stock.return : stock.Return || 0;
+              return (
+                <div key={i} className="stock-row">
+                  <span className="col-ticker stock-ticker">
+                    {stock.ticker || stock.Symbol}
+                  </span>
+                  <span className="col-sector" title={rawSector}>
+                    {sectorName}
+                  </span>
+                  <span
+                    className={`col-return ${stockReturn >= 0 ? "positive" : "negative"}`}
                   >
-                    No holdings data available for this month.
-                  </div>
-                )}
-              </div>
-
-              {chartData.length > 0 && (
-                <div
-                  style={{
-                    marginTop: "16px",
-                    borderTop: "1px solid #2a2a40",
-                    paddingTop: "12px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      color: "#8a8aab",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    Sector Allocation
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: "16px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "110px",
-                        height: "110px",
-                        borderRadius: "50%",
-                        background: `conic-gradient(${gradientStops})`,
-                        position: "relative",
-                        flexShrink: 0,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-                      }}
-                    >
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "24px",
-                          left: "24px",
-                          right: "24px",
-                          bottom: "24px",
-                          backgroundColor: "#1e1e2f",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    </div>
-
-                    <div
-                      className="custom-scrollbar"
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "5px",
-                        flex: 1,
-                      }}
-                    >
-                      {chartData.map((entry, idx) => (
-                        <div
-                          key={entry.name}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            fontSize: "11px",
-                          }}
-                        >
-                          <span
-                            style={{
-                              width: "8px",
-                              height: "8px",
-                              borderRadius: "50%",
-                              backgroundColor: COLORS[idx % COLORS.length],
-                              flexShrink: 0,
-                            }}
-                          />
-                          <span
-                            style={{
-                              color: "#fff",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                            title={entry.name}
-                          >
-                            {entry.name}
-                          </span>
-                          <span
-                            style={{
-                              color: "#8a8aab",
-                              marginLeft: "auto",
-                              fontWeight: "600",
-                            }}
-                          >
-                            {entry.value.toFixed(1)}%
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                    {stockReturn > 0 ? "+" : ""}
+                    {stockReturn.toFixed(2)}%
+                  </span>
                 </div>
-              )}
+              );
+            })}
+          </div>
 
-              <div className="modal-total-footer">
-                <span>Total Portfolio Return:</span>
-                <span className={totalReturn >= 0 ? "positive" : "negative"}>
-                  {totalReturn > 0 ? "+" : ""}
-                  {Number(totalReturn).toFixed(2)}%
-                </span>
+          {chartData.length > 0 && (
+            <div
+              style={{
+                marginTop: "16px",
+                borderTop: "1px solid #2a2a40",
+                paddingTop: "12px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  color: "#8a8aab",
+                  marginBottom: "10px",
+                }}
+              >
+                Sector Allocation
               </div>
 
               <div
                 style={{
-                  fontSize: "11px",
-                  color: "#8a8aab",
-                  textAlign: "center",
-                  marginTop: "8px",
-                  fontStyle: "italic",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "16px",
                 }}
               >
-                * Returns are calculated based on stock holdings and ignore
-                portfolio cash.
+                <div
+                  style={{
+                    width: "110px",
+                    height: "110px",
+                    borderRadius: "50%",
+                    background: `conic-gradient(${gradientStops})`,
+                    position: "relative",
+                    flexShrink: 0,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "24px",
+                      left: "24px",
+                      right: "24px",
+                      bottom: "24px",
+                      backgroundColor: "#1e1e2f",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="custom-scrollbar"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                    flex: 1,
+                  }}
+                >
+                  {chartData.map((entry, idx) => (
+                    <div
+                      key={entry.name}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "11px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "50%",
+                          backgroundColor: COLORS[idx % COLORS.length],
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span
+                        style={{
+                          color: "#fff",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={entry.name}
+                      >
+                        {entry.name}
+                      </span>
+                      <span
+                        style={{
+                          color: "#8a8aab",
+                          marginLeft: "auto",
+                          fontWeight: "600",
+                        }}
+                      >
+                        {entry.value.toFixed(1)}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </>
-          ) : (
-            <DailyPerformanceTab
-              dailyData={dailyData}
-              ytdReturn={data?.ytdReturn}
-              itdReturn={data?.itdReturn}
-            />
+            </div>
           )}
+
+          <div className="modal-total-footer">
+            <span>Total Portfolio Return:</span>
+            <span className={totalReturn >= 0 ? "positive" : "negative"}>
+              {totalReturn > 0 ? "+" : ""}
+              {totalReturn.toFixed(2)}%
+            </span>
+          </div>
+
+          <div
+            style={{
+              fontSize: "11px",
+              color: "#8a8aab",
+              textAlign: "center",
+              marginTop: "8px",
+              fontStyle: "italic",
+            }}
+          >
+            * Returns are calculated based on stock holdings and ignore
+            portfolio cash.
+          </div>
+          <div
+            style={{
+              fontSize: "11px",
+              color: "#8a8aab",
+              textAlign: "center",
+              marginTop: "4px",
+              fontStyle: "italic",
+            }}
+          >
+            * Sector weights are equal-weighted per stock.
+          </div>
+          <div
+            style={{
+              fontSize: "11px",
+              color: "#8a8aab",
+              textAlign: "center",
+              marginTop: "4px",
+              fontStyle: "italic",
+            }}
+          >
+            * Differs from main table due to open-to-close calculation.
+          </div>
         </div>
       </div>
     </div>
