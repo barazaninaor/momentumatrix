@@ -136,32 +136,23 @@ export const Performance: React.FC = () => {
     }));
   }, []);
 
-  // Handler to fetch portfolio state holdings when a month is clicked in the performance table
+  // Handler to extract month data locally from the matrix without failing network requests
   const handleMonthClick = useCallback(
     async (year: number, monthNumber: number, monthName: string) => {
-      try {
-        console.log(
-          `Fetching portfolio state for ${year}/${monthNumber} (${monthName})`,
-        );
-        const portfolioId = 1;
-        const response = await api.get(
-          `/transactions/portfolio-state/${portfolioId}/${year}/${monthNumber}`,
-        );
+      const yearRow = matrixData.find(
+        (row: any) => Number(row.year) === Number(year),
+      );
+      const monthKey = String(monthNumber).padStart(2, "0");
+      const monthDataFromMatrix = yearRow?.months?.[monthKey] || {};
 
-        setSelectedMonthCard({
-          year,
-          monthNumber, // שמירת מספר החודש עבור שליפת הנתונים היומיים
-          monthName,
-          data: response.data,
-        });
-      } catch (error) {
-        console.error(
-          "Failed to fetch portfolio state holdings for month:",
-          error,
-        );
-      }
+      setSelectedMonthCard({
+        year,
+        monthNumber,
+        monthName,
+        data: monthDataFromMatrix,
+      });
     },
-    [],
+    [matrixData],
   );
 
   // Safely extract years/months matrix for performance calculations
@@ -361,7 +352,7 @@ export const Performance: React.FC = () => {
           monthName={selectedMonthCard.monthName}
           monthNumber={selectedMonthCard.monthNumber}
           data={selectedMonthCard.data}
-          dailyDataByMonth={rawApiData?.dailyDataByMonth} // העברת אובייקט הימים הגלובלי מהשרת
+          dailyDataByMonth={rawApiData?.dailyDataByMonth}
           showDaily={true}
           onClose={() => setSelectedMonthCard(null)}
         />
