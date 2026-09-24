@@ -5,11 +5,11 @@ import { DailyPerformanceTab } from "../DailyPerformanceTab/DailyPerformanceTab"
 interface PerformanceCardProps {
   year: number;
   monthName: string;
-  monthNumber?: string | number; // למשל '09' או 9
-  data: any; // Allow flexible data structure for both backtest and portfolio state API
-  dailyDataByMonth?: { [key: string]: any[] }; // מפת החודשים הכללית מהשרת (למשל {"2026-09": [...]})
+  monthNumber?: string | number;
+  data: any;
+  dailyDataByMonth?: { [key: string]: any[] };
   onClose: () => void;
-  showDaily?: boolean; // Prop to optionally show daily performance tab
+  showDaily?: boolean;
 }
 
 const sectorMapping: { [key: string]: string } = {
@@ -40,10 +40,8 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
   onClose,
   showDaily = false,
 }) => {
-  // State to toggle between holdings breakdown and daily performance
   const [activeTab, setActiveTab] = useState<"holdings" | "daily">("holdings");
 
-  // Listen for Escape key to close the modal
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -56,19 +54,22 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     };
   }, [onClose]);
 
-  // Safely extract stocks/holdings array regardless of API response structure
-  const rawStocksList =
-    data?.stocks ||
-    data?.holdings ||
-    data?.positions ||
-    (Array.isArray(data) ? data : []);
+  // חילוץ בטוח ומקיף של רשימת המניות מכל מבנה אפשרי
+  const rawStocksList = Array.isArray(data)
+    ? data
+    : data?.stocks ||
+      data?.holdings ||
+      data?.positions ||
+      data?.items ||
+      data?.data ||
+      [];
 
   const sortedStocks = [...rawStocksList].sort(
     (a: any, b: any) =>
-      (b.return || b.Return || 0) - (a.return || a.Return || 0),
+      (b.return || b.Return || b.returns || 0) -
+      (a.return || a.Return || a.returns || 0),
   );
 
-  // Force equal weight distribution for each stock (e.g. 10% each if there are 10 stocks)
   const equalWeight = rawStocksList.length > 0 ? 100 / rawStocksList.length : 0;
 
   const sectorAllocation: { [key: string]: number } = {};
@@ -105,9 +106,12 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     .join(", ");
 
   const totalReturn =
-    data?.return !== undefined ? data.return : data?.total_return || 0;
+    data?.return !== undefined
+      ? data.return
+      : data?.total_return !== undefined
+        ? data.total_return
+        : 0;
 
-  // Extract daily performance data securely from various possible sources including dailyDataByMonth
   const formattedMonthNum = String(monthNumber).padStart(2, "0");
   const monthKey = `${year}-${formattedMonthNum}`;
 
@@ -130,7 +134,6 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
           </button>
         </div>
 
-        {/* Render tabs if showDaily is enabled */}
         {showDaily && (
           <div
             style={{
@@ -190,30 +193,46 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
               </div>
 
               <div className="stocks-list">
-                {sortedStocks.map((stock: any, i: number) => {
-                  const rawSector = stock.sector || stock.Sector || "Other";
-                  const sectorName = getShortSector(rawSector);
-                  const stockReturn =
-                    stock.return !== undefined
-                      ? stock.return
-                      : stock.Return || 0;
-                  return (
-                    <div key={i} className="stock-row">
-                      <span className="col-ticker stock-ticker">
-                        {stock.ticker || stock.Symbol}
-                      </span>
-                      <span className="col-sector" title={rawSector}>
-                        {sectorName}
-                      </span>
-                      <span
-                        className={`col-return ${stockReturn >= 0 ? "positive" : "negative"}`}
-                      >
-                        {stockReturn > 0 ? "+" : ""}
-                        {stockReturn.toFixed(2)}%
-                      </span>
-                    </div>
-                  );
-                })}
+                {sortedStocks.length > 0 ? (
+                  sortedStocks.map((stock: any, i: number) => {
+                    const rawSector = stock.sector || stock.Sector || "Other";
+                    const sectorName = getShortSector(rawSector);
+                    const stockReturn =
+                      stock.return !== undefined
+                        ? stock.return
+                        : stock.Return !== undefined
+                          ? stock.Return
+                          : stock.returns || 0;
+                    return (
+                      <div key={i} className="stock-row">
+                        <span className="col-ticker stock-ticker">
+                          {stock.ticker || stock.Symbol || stock.symbol}
+                        </span>
+                        <span className="col-sector" title={rawSector}>
+                          {sectorName}
+                        </span>
+                        <span
+                          className={`col-return ${
+                            stockReturn >= 0 ? "positive" : "negative"
+                          }`}
+                        >
+                          {stockReturn > 0 ? "+" : ""}
+                          {Number(stockReturn).toFixed(2)}%
+                        </span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#8a8aab",
+                    }}
+                  >
+                    No holdings data available for this month.
+                  </div>
+                )}
               </div>
 
               {chartData.length > 0 && (
@@ -326,7 +345,7 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
                 <span>Total Portfolio Return:</span>
                 <span className={totalReturn >= 0 ? "positive" : "negative"}>
                   {totalReturn > 0 ? "+" : ""}
-                  {totalReturn.toFixed(2)}%
+                  {Number(totalReturn).toFixed(2)}%
                 </span>
               </div>
 
@@ -355,5 +374,3 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     </div>
   );
 };
-
-// ניסוי בדיקת סנכרון לגיט - ספטמבר 2026
