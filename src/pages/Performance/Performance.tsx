@@ -24,9 +24,10 @@ export const Performance: React.FC = () => {
   // Loading state
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // State for managing the active month breakdown card modal
+  // State for managing the active month breakdown card modal (כולל שמירת מספר החודש)
   const [selectedMonthCard, setSelectedMonthCard] = useState<{
     year: number;
+    monthNumber: number | string;
     monthName: string;
     data: any;
   } | null>(null);
@@ -149,6 +150,7 @@ export const Performance: React.FC = () => {
 
         setSelectedMonthCard({
           year,
+          monthNumber, // שמירת מספר החודש עבור שליפת הנתונים היומיים
           monthName,
           data: response.data,
         });
@@ -193,7 +195,6 @@ export const Performance: React.FC = () => {
     let yearlyReturns: { year: number; return: number }[] = [];
     let cumulativeProduct = 1.0;
 
-    // Sort rows in descending order (newest year first) so the current/newest year appears at the top
     const sortedRows = [...matrixData].sort(
       (a: any, b: any) => Number(b.year) - Number(a.year),
     );
@@ -279,7 +280,6 @@ export const Performance: React.FC = () => {
     };
   }, [matrixData, rawApiData]);
 
-  // Extract SPY metrics if available from backend response
   const spyMetrics = useMemo(() => {
     if (rawApiData && rawApiData.spyMetrics) {
       return rawApiData.spyMetrics;
@@ -317,7 +317,6 @@ export const Performance: React.FC = () => {
             alignItems: "center",
           }}
         >
-          {/* Performance Metrics Summary Dashboard right below the main title */}
           <PerformanceMetricsSummary
             title="PERFORMANCE PERIOD"
             performanceMetrics={performanceMetrics}
@@ -333,7 +332,6 @@ export const Performance: React.FC = () => {
               maxWidth: "1300px",
             }}
           >
-            {/* Performance Table section */}
             <PerformanceTable
               selectedBenchmarks={selectedBenchmarks}
               setSelectedBenchmarks={setSelectedBenchmarks}
@@ -343,7 +341,6 @@ export const Performance: React.FC = () => {
               showNote={true}
             />
 
-            {/* Performance Chart rendering the combined portfolio and benchmark timeline */}
             <PerformanceChart
               data={
                 combinedChartData.length > 0 ? combinedChartData : rawApiData
@@ -357,13 +354,15 @@ export const Performance: React.FC = () => {
         </div>
       )}
 
-      {/* Render the Portfolio Breakdown Modal Card if a month is selected with showDaily enabled */}
+      {/* Render the Portfolio Breakdown Modal Card with daily support */}
       {selectedMonthCard && (
         <PerformanceCard
           year={selectedMonthCard.year}
           monthName={selectedMonthCard.monthName}
+          monthNumber={selectedMonthCard.monthNumber}
           data={selectedMonthCard.data}
-          showDaily={true} // Enables the daily breakdown tab exclusively on the performance view
+          dailyDataByMonth={rawApiData?.dailyDataByMonth} // העברת אובייקט הימים הגלובלי מהשרת
+          showDaily={true}
           onClose={() => setSelectedMonthCard(null)}
         />
       )}
