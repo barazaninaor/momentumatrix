@@ -136,6 +136,15 @@ export const Performance: React.FC = () => {
     }));
   }, []);
 
+  // Safely extract years/months matrix for performance calculations (מוצהר לפני handleMonthClick)
+  const matrixData = useMemo(() => {
+    if (!rawApiData) return [];
+    if (Array.isArray(rawApiData)) return rawApiData;
+    if (rawApiData.matrix && Array.isArray(rawApiData.matrix))
+      return rawApiData.matrix;
+    return [];
+  }, [rawApiData]);
+
   // Handler to extract month data locally from the matrix without failing network requests
   const handleMonthClick = useCallback(
     async (year: number, monthNumber: number, monthName: string) => {
@@ -154,15 +163,6 @@ export const Performance: React.FC = () => {
     },
     [matrixData],
   );
-
-  // Safely extract years/months matrix for performance calculations
-  const matrixData = useMemo(() => {
-    if (!rawApiData) return [];
-    if (Array.isArray(rawApiData)) return rawApiData;
-    if (rawApiData.matrix && Array.isArray(rawApiData.matrix))
-      return rawApiData.matrix;
-    return [];
-  }, [rawApiData]);
 
   // Compute performance metrics for the summary dashboard
   const performanceMetrics = useMemo(() => {
