@@ -30,19 +30,18 @@ export const DailyPerformanceTab: React.FC<DailyPerformanceTabProps> = ({
     );
   }
 
-  // Sort daily data chronologically if needed, or assume sorted.
-  // Let's ensure newest first or oldest first based on your preference (here we keep standard or sort ascending for cumulative calculations).
+  // Sort daily data chronologically (oldest to newest) to calculate compound/MTD correctly
   const sortedData = [...dailyData].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
 
-  // For the summary cards at the top, we want the latest available item (last in chronological order)
-  const lastItem = sortedData[sortedData.length - 1];
   const firstItem = sortedData[0];
+  const lastItem = sortedData[sortedData.length - 1];
 
   const latestDailyReturn =
     lastItem.dailyReturn !== undefined ? lastItem.dailyReturn : 0;
 
+  // Calculate MTD for the month using the first day of the month as the base
   const mtdReturn =
     lastItem.mtdReturn !== undefined
       ? lastItem.mtdReturn
@@ -57,8 +56,44 @@ export const DailyPerformanceTab: React.FC<DailyPerformanceTabProps> = ({
   const currentItd =
     lastItem.itdReturn !== undefined ? lastItem.itdReturn : itdReturn;
 
-  // For display in the table, users usually like to see newest dates at the top
-  const tableData = [...sortedData].reverse();
+  // Prepare table data with row-specific calculations (newest dates at the top)
+  const tableDataWithMetrics = sortedData.map((dayItem, index) => {
+    let dailyRet = dayItem.dailyReturn;
+    if (dailyRet === undefined) {
+      const prevVal =
+        index > 0
+          ? sortedData[index - 1].net_liquidation
+          : dayItem.net_liquidation;
+      dailyRet =
+        prevVal > 0 ? ((dayItem.net_liquidation - prevVal) / prevVal) * 100 : 0;
+    }
+
+    // Calculate rolling MTD up to this specific day in the month
+    let rowMtd = dayItem.mtdReturn;
+    if (rowMtd === undefined) {
+      rowMtd =
+        firstItem.net_liquidation > 0
+          ? ((dayItem.net_liquidation - firstItem.net_liquidation) /
+              firstItem.net_liquidation) *
+            100
+          : 0;
+    }
+
+    const rowYtd =
+      dayItem.ytdReturn !== undefined ? dayItem.ytdReturn : currentYtd;
+    const rowItd =
+      dayItem.itdReturn !== undefined ? dayItem.itdReturn : currentItd;
+
+    return {
+      ...dayItem,
+      calculatedDailyReturn: dailyRet,
+      calculatedMtd: rowMtd,
+      calculatedYtd: rowYtd,
+      calculatedItd: rowItd,
+    };
+  });
+
+  const tableData = [...tableDataWithMetrics].reverse();
 
   return (
     <div className="daily-performance-wrapper">
@@ -71,7 +106,7 @@ export const DailyPerformanceTab: React.FC<DailyPerformanceTabProps> = ({
           >
             {latestDailyReturn >= 0 ? "+" : ""}
             {latestDailyReturn.toFixed(2)}%
-          </span>{" "}
+          </span>
           ביצועי היום האחרון
         </div>
         <div className="summary-card">
@@ -117,65 +152,44 @@ export const DailyPerformanceTab: React.FC<DailyPerformanceTabProps> = ({
             </tr>
           </thead>
           <tbody>
-            {tableData.map((dayItem, idx) => {
-              // Calculate daily return for the specific row if missing
-              let dailyRet = dayItem.dailyReturn;
-              if (dailyRet === undefined) {
-                // Find index in chronological array to get the actual previous day
-                const chronoIndex = sortedData.findIndex(
-                  (d) => d.date === dayItem.date,
-                );
-                const prevVal =
-                  chronoIndex > 0
-                    ? sortedData[chronoIndex - 1].net_liquidation
-                    : dayItem.net_liquidation;
-                dailyRet =
-                  prevVal > 0
-                    ? ((dayItem.net_liquidation - prevVal) / prevVal) * 100
-                    : 0;
-              }
-
-              // Use row-specific metrics if provided by the backend, otherwise fall back gracefully
-              const rowMtd =
-                dayItem.mtdReturn !== undefined ? dayItem.mtdReturn : 0;
-              const rowYtd =
-                dayItem.ytdReturn !== undefined
-                  ? dayItem.ytdReturn
-                  : currentYtd;
-              const rowItd =
-                dayItem.itdReturn !== undefined
-                  ? dayItem.itdReturn
-                  : currentItd;
-
-              return (
-                <tr key={idx}>
-                  <td>{dayItem.date}</td>
-                  <td>
-                    $
-                    {dayItem.net_liquidation?.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </td>
-                  <td className={dailyRet >= 0 ? "positive" : "negative"}>
-                    {dailyRet >= 0 ? "+" : ""}
-                    {dailyRet.toFixed(2)}%
-                  </td>
-                  <td className={rowMtd >= 0 ? "positive" : "negative"}>
-                    {rowMtd >= 0 ? "+" : ""}
-                    {rowMtd.toFixed(2)}%
-                  </td>
-                  <td className={rowYtd >= 0 ? "positive" : "negative"}>
-                    {rowYtd >= 0 ? "+" : ""}
-                    {rowYtd.toFixed(2)}%
-                  </td>
-                  <td className={rowItd >= 0 ? "positive" : "negative"}>
-                    {rowItd >= 0 ? "+" : ""}
-                    {rowItd.toFixed(2)}%
-                  </td>
-                </tr>
-              );
-            })}
+            {tableData.map((row, idx) => (
+              <tr key={idx}>
+                <td>{row.date}</td>
+                <td>
+                  $
+                  {row.net_liquidation?.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </td>
+                <td
+                  className={
+                    row.calculatedDailyReturn >= 0 ? "positive" : "negative"
+                  }
+                >
+                  {row.calculatedDailyReturn >= 0 ? "+" : ""}
+                  {row.calculatedDailyReturn.toFixed(2)}%
+                </td>
+                <td
+                  className={row.calculatedMtd >= 0 ? "positive" : "negative"}
+                >
+                  {row.calculatedMtd >= 0 ? "+" : ""}
+                  {row.calculatedMtd.toFixed(2)}%
+                </td>
+                <td
+                  className={row.calculatedYtd >= 0 ? "positive" : "negative"}
+                >
+                  {row.calculatedYtd >= 0 ? "+" : ""}
+                  {row.calculatedYtd.toFixed(2)}%
+                </td>
+                <td
+                  className={row.calculatedItd >= 0 ? "positive" : "negative"}
+                >
+                  {row.calculatedItd >= 0 ? "+" : ""}
+                  {row.calculatedItd.toFixed(2)}%
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
