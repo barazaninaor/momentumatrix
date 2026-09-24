@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./PerformanceCard.css";
+// אם ה-DailyPerformanceTab נמצא בקובץ נפרד, ודא שהייבוא נכון:
+// import { DailyPerformanceTab } from "./DailyPerformanceTab";
 
 interface PerformanceCardProps {
   year: number;
@@ -101,7 +103,7 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
   const totalReturn =
     data?.return !== undefined ? data.return : data?.total_return || 0;
 
-  // Extract daily performance data if available in the response object
+  // Extract daily performance data securely from various possible keys
   const dailyData =
     data?.daily || data?.daily_returns || data?.dailyPerformance || [];
 
@@ -168,7 +170,7 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
         )}
 
         <div className="modal-body">
-          {activeTab === "holdings" ? (
+          {activeTab === "holdings" || !showDaily ? (
             <>
               <div className="stocks-table-header">
                 <span className="col-ticker">Ticker</span>
@@ -329,73 +331,14 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
                 * Returns are calculated based on stock holdings and ignore
                 portfolio cash.
               </div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "#8a8aab",
-                  textAlign: "center",
-                  marginTop: "4px",
-                  fontStyle: "italic",
-                }}
-              >
-                * Sector weights are equal-weighted per stock.
-              </div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "#8a8aab",
-                  textAlign: "center",
-                  marginTop: "4px",
-                  fontStyle: "italic",
-                }}
-              >
-                * Differs from main table due to open-to-close calculation.
-              </div>
             </>
           ) : (
-            <div style={{ padding: "10px 0" }}>
-              <div className="stocks-table-header">
-                <span className="col-ticker">Date</span>
-                <span className="col-return" style={{ textAlign: "right" }}>
-                  Daily Return
-                </span>
-              </div>
-              <div
-                className="stocks-list"
-                style={{ maxHeight: "300px", overflowY: "auto" }}
-              >
-                {dailyData.length > 0 ? (
-                  dailyData.map((day: any, i: number) => {
-                    const dayReturn =
-                      day.return !== undefined ? day.return : day.Return || 0;
-                    return (
-                      <div key={i} className="stock-row">
-                        <span className="col-ticker stock-ticker">
-                          {day.date || day.Date}
-                        </span>
-                        <span
-                          className={`col-return ${dayReturn >= 0 ? "positive" : "negative"}`}
-                          style={{ textAlign: "right" }}
-                        >
-                          {dayReturn > 0 ? "+" : ""}
-                          {dayReturn.toFixed(2)}%
-                        </span>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      color: "#8a8aab",
-                      padding: "20px",
-                    }}
-                  >
-                    No daily performance data available for this month.
-                  </div>
-                )}
-              </div>
-            </div>
+            /* כאן מופעל הרכיב הייעודי או התצוגה המלאה של ה-Daily Performance */
+            <DailyPerformanceTab
+              dailyData={dailyData}
+              ytdReturn={data?.ytdReturn}
+              itdReturn={data?.itdReturn}
+            />
           )}
         </div>
       </div>
