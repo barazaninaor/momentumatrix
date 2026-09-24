@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PerformanceCard.css";
-// אם ה-DailyPerformanceTab נמצא בקובץ נפרד, ודא שהייבוא נכון:
-// import { DailyPerformanceTab } from "./DailyPerformanceTab";
+import { DailyPerformanceTab } from "../DailyPerformanceTab/DailyPerformanceTab";
 
 interface PerformanceCardProps {
   year: number;
@@ -333,7 +332,6 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
               </div>
             </>
           ) : (
-            /* כאן מופעל הרכיב הייעודי או התצוגה המלאה של ה-Daily Performance */
             <DailyPerformanceTab
               dailyData={dailyData}
               ytdReturn={data?.ytdReturn}
