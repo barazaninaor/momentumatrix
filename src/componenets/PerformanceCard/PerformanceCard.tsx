@@ -355,3 +355,5 @@ export const PerformanceCard: React.FC<PerformanceCardProps> = ({
     </div>
   );
 };
+
+// ניסוי בדיקת סנכרון לגיט - ספטמבר 2026
