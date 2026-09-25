@@ -11,7 +11,7 @@ cd frontend
 git status
 
 # Step 3: Stage all modified and new files 
-git add frontend/
+git add .
 
 # Step 4: Commit the changes with a short, descriptive message
 git commit -m "Update"
