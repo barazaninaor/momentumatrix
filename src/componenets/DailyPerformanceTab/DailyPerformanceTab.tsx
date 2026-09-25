@@ -197,7 +197,7 @@ export const DailyPerformanceTab: React.FC<DailyPerformanceTabProps> = ({
 };
 
 /**
- * TODO:
+ * TODO_:
  * 1. Synchronize daily performance state and metrics with the backend server API.
  * 2. Refactor/modularize the daily summary view into a reusable Card component for cleaner UI layout.
- *//
+ */
