@@ -16,13 +16,13 @@
 /* Mobile-only adjustments restricted strictly to screens up to 768px */
 @media screen and (max-width: 768px) {
   .strategy-page {
-    padding: 12px 8px !important; 
+    padding: 12px 8px !important;
     margin: 0 !important;
   }
 
   .strategy-page .hero-card,
   .strategy-page .glass-card {
-    padding: 16px 12px !important; 
+    padding: 16px 12px !important;
     margin: 0 auto !important;
     width: 100% !important;
     box-sizing: border-box;
@@ -67,7 +67,7 @@
   }
 
   /* Text paragraphs mobile alignment and typography */
-  .strategy-page p, 
+  .strategy-page p,
   .strategy-page .strategy-description p,
   .strategy-page .description-text p,
   .strategy-card p {
