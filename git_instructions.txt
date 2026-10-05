@@ -21,3 +21,4 @@ git push origin main
 
 # Step 6: Build and deploy the updated website to GitHub Pages
 npm run deploy
+
