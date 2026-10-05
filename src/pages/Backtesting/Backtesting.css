@@ -2,10 +2,11 @@
   margin-top: 24px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 40px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  align-items: center;
 }
 
 /* Reset display settings for table and chart sections without using important */
@@ -20,21 +21,43 @@
   box-sizing: border-box;
 }
 
-/* Restores the backtest table width to 70% on desktop screens */
+/* התאמה מלאה למבנה של פרפורמנס - הקונטיינר תופס בדיוק 1320px כמו הגרף */
 .performance-table-container.backtest-table-width {
-  width: 100%;
-  overflow-x: auto; /* מאפשר גלילה גם בדסקטופ במידת הצורך */
+  width: 1320px !important;
+  max-width: 100% !important;
+  margin: 0 auto;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 
+/* הטבלה עצמה תופסת 100% מהקונטיינר בדיוק כמו בפרפורמנס */
 .performance-table-container.backtest-table-width .fund-table {
-  width: 70% !important;
-  min-width: 850px; /* מבטיח רוחב מינימלי שלא ימעך את העמודות */
+  width: 100% !important;
+  max-width: 100% !important;
   margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #0b131e;
+  text-align: center;
+  table-layout: fixed;
+  box-sizing: border-box;
+}
+
+.performance-table-container.backtest-table-width .fund-table th,
+.performance-table-container.backtest-table-width .fund-table td {
+  border: 1px solid #1e293b;
+  padding: 12px 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 /* Mobile responsive override to expand table container and enable smooth horizontal scrolling */
 @media screen and (max-width: 768px) {
+  .backtesting-content {
+    align-items: stretch;
+  }
+
   .performance-table-container.backtest-table-width {
     width: 100% !important;
     max-width: 100% !important;
@@ -43,11 +66,12 @@
     -webkit-overflow-scrolling: touch;
     display: block !important;
     box-sizing: border-box;
-    padding: 0 !important;
+    padding: 0 10px !important;
   }
 
   .performance-table-container.backtest-table-width .fund-table {
-    width: auto !important;
-    min-width: 850px !important;
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: 100% !important;
   }
 }
