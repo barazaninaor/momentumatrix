@@ -31,7 +31,6 @@
   box-sizing: border-box;
 }
 
-/* הטבלה עצמה תופסת 100% מהקונטיינר בדיוק כמו בפרפורמנס */
 .performance-table-container.backtest-table-width .fund-table {
   width: 100% !important;
   max-width: 100% !important;
